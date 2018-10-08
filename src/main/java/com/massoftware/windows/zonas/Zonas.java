@@ -17,7 +17,7 @@ public class Zonas {
 	}
 
 	public void setZona(String zona) {
-		this.zona = zona;
+		this.zona = UtilModel.format(zona);
 	}
 
 	public String getNombre() {
