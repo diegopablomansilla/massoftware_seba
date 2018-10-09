@@ -1,7 +1,9 @@
 package com.massoftware;
 
+import com.massoftware.windows.condicionesDeVentas.WCondicionesDeVentas;
 import com.massoftware.windows.paises.WPaises;
 import com.massoftware.windows.provincias.WProvincias;
+import com.massoftware.windows.subCtaCte.WSubCtaCte;
 import com.massoftware.windows.zonas.WZonas;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
@@ -31,6 +33,8 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Países", openPaisesCmd());
 		a1.addItem("Provincias", openProvinciasCmd());
 		a1.addItem("Zonas", openZonasCmd());
+		a1.addItem("Sub Ctas-Ctes", openSubCtaCteCmd());
+		a1.addItem("Condiciones de Ventas", openCondDeVentasCmd());
 		
 		return menubar;
 	}
@@ -85,5 +89,43 @@ public class SuperMenu extends AbstractMenu {
 			}
 		};
 	}
+	
+	protected Command openSubCtaCteCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WSubCtaCte();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	
+	protected Command openCondDeVentasCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WCondicionesDeVentas();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	
+	
 	
 }
