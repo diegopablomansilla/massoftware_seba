@@ -146,7 +146,7 @@ public class WZonas extends Window {
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			itemsGRD.setWidth(24f,Unit.EM);
+			itemsGRD.setWidth("100%");
 
 			itemsGRD.setColumns(new Object[] { "zona", "nombre", "bonificacion","recargo" });
 

@@ -1,9 +1,13 @@
 package com.massoftware;
 
+import com.massoftware.windows.alicuotas.WAlicuotas;
+import com.massoftware.windows.cargas.WCargas;
 import com.massoftware.windows.condicionesDeVentas.WCondicionesDeVentas;
+import com.massoftware.windows.motBloqueosClie.WMotBloqueosClie;
 import com.massoftware.windows.paises.WPaises;
 import com.massoftware.windows.provincias.WProvincias;
 import com.massoftware.windows.subCtaCte.WSubCtaCte;
+import com.massoftware.windows.sucursales.WSucursales;
 import com.massoftware.windows.zonas.WZonas;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
@@ -35,6 +39,10 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Zonas", openZonasCmd());
 		a1.addItem("Sub Ctas-Ctes", openSubCtaCteCmd());
 		a1.addItem("Condiciones de Ventas", openCondDeVentasCmd());
+		a1.addItem("Bloqueo de clientes", openBloqClientesCmd());
+		a1.addItem("Alícuotas", openAlicuotasCmd());
+		a1.addItem("Cargas", openCargasCmd());
+		a1.addItem("Sucursales", openSucursalesCmd());
 		
 		return menubar;
 	}
@@ -126,6 +134,73 @@ public class SuperMenu extends AbstractMenu {
 	}
 	
 	
+	protected Command openBloqClientesCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WMotBloqueosClie();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openAlicuotasCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WAlicuotas();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openCargasCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WCargas();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openSucursalesCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WSucursales();
+				getUI().addWindow(window);
+			}
+		};
+	}
 	
 	
 }

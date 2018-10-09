@@ -1,5 +1,6 @@
-package com.massoftware.windows.paises;
+package com.massoftware.windows.alicuotas;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,14 +29,14 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class WPaises extends Window {
+public class WAlicuotas extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<PaisesFiltro> filterBI;
-	private BeanItemContainer<Paises> itemsBIC;
+	private BeanItem<AlicuotasFiltro> filterBI;
+	private BeanItemContainer<Alicuotas> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -53,20 +54,20 @@ public class WPaises extends Window {
 
 	// -------------------------------------------------------------
 
-	private HorizontalLayout numeroTXTHL;
-	private HorizontalLayout nombreTXTHL;
+	private HorizontalLayout codigoTXTHL;
+	private HorizontalLayout descripcionTXTHL;
 
 	// -------------------------------------------------------------
 
 	@SuppressWarnings("serial")
-	public WPaises() {
+	public WAlicuotas() {
 		super();
 
 		try {
 
 			buildContainersItems();
 
-			UtilUI.confWinList(this, "Paises");
+			UtilUI.confWinList(this, "Alícuotas");
 
 			VerticalLayout content = UtilUI.buildWinContentList();
 
@@ -79,16 +80,16 @@ public class WPaises extends Window {
 
 			// -----------
 
-			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero",
-					"Numero", false, 5, -1, 3, false, false, null, false,
+			codigoTXTHL = UtilUI.buildTXTHLInteger(filterBI, "codigo",
+					"Código", false, 5, -1, 3, false, false, null, false,
 					UtilUI.EQUALS, 0, 255);
 
-			TextField numeroTXT = (TextField) numeroTXTHL.getComponent(0);
+			TextField codigoTXT = (TextField) codigoTXTHL.getComponent(0);
 
-			numeroTXT.addTextChangeListener(new TextChangeListener() {
+			codigoTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						numeroTXT.setValue(event.getText());
+						codigoTXT.setValue(event.getText());
 						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
@@ -97,24 +98,24 @@ public class WPaises extends Window {
 
 			});
 
-			Button numeroBTN = (Button) numeroTXTHL.getComponent(1);
+			Button codigoBTN = (Button) codigoTXTHL.getComponent(1);
 
-			numeroBTN.addClickListener(e -> {
+			codigoBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
 			// -----------
 
-			nombreTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
+			descripcionTXTHL = UtilUI.buildTXTHL(filterBI, "descripcion", "Descripción",
 					false, 20, -1, 25, false, false, null, false,
 					UtilUI.CONTAINS_WORDS_AND);
 
-			TextField nombreTXT = (TextField) nombreTXTHL.getComponent(0);
+			TextField descripcionTXT = (TextField) descripcionTXTHL.getComponent(0);
 
-			nombreTXT.addTextChangeListener(new TextChangeListener() {
+			descripcionTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						nombreTXT.setValue(event.getText());
+						descripcionTXT.setValue(event.getText());
 						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
@@ -123,9 +124,9 @@ public class WPaises extends Window {
 
 			});
 
-			Button nombreBTN = (Button) nombreTXTHL.getComponent(1);
+			Button descripcionBTN = (Button) descripcionTXTHL.getComponent(1);
 
-			nombreBTN.addClickListener(e -> {
+			descripcionBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
@@ -136,22 +137,24 @@ public class WPaises extends Window {
 				loadData();
 			});
 
-			filaFiltroHL.addComponents(numeroTXTHL, nombreTXTHL, buscarBTN);
+			filaFiltroHL.addComponents(codigoTXTHL, descripcionTXTHL,buscarBTN);
 
-			filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
+			filaFiltroHL.setComponentAlignment(buscarBTN,Alignment.MIDDLE_RIGHT);
 
 			// =======================================================
 			// -------------------------------------------------------
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			itemsGRD.setWidth("100%");
+			itemsGRD.setWidth("430px");
 
-			itemsGRD.setColumns(new Object[] { "numero", "nombre", "abreviatura" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Nro.", true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), "Abreviatura", true, 80);
+			itemsGRD.setColumns(new Object[] { "codigo", "descripcion", "porcentaje", "importeFijo" });
+
+			UtilUI.confColumn(itemsGRD.getColumn("codigo"), "Código", true,50);
+			UtilUI.confColumn(itemsGRD.getColumn("descripcion"), "Descripción.", true, 200);
+			UtilUI.confColumn(itemsGRD.getColumn("porcentaje"), "Porcentaje", true, 80);
+			UtilUI.confColumn(itemsGRD.getColumn("importeFijo"), "Importe Fijo",true, 80);
 
 			itemsGRD.setContainerDataSource(itemsBIC);
 
@@ -176,7 +179,7 @@ public class WPaises extends Window {
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			order.add(new SortOrder("numero", SortDirection.ASCENDING));
+			order.add(new SortOrder("codigo", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
 
@@ -228,15 +231,11 @@ public class WPaises extends Window {
 
 			// -------------------------------------------------------
 
-			content.addComponents(filaFiltroHL, itemsGRD, filaBotoneraPagedHL,
-					filaBotoneraHL, filaBotonera2HL);
+			content.addComponents(itemsGRD, filaBotoneraPagedHL, filaBotoneraHL, filaBotonera2HL);
 
-			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
-			content.setComponentAlignment(filaBotoneraPagedHL,
-					Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotoneraPagedHL, Alignment.MIDDLE_RIGHT);
 			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
-			content.setComponentAlignment(filaBotonera2HL,
-					Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
 
 			this.setContent(content);
 
@@ -317,9 +316,8 @@ public class WPaises extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<PaisesFiltro>(new PaisesFiltro());
-		itemsBIC = new BeanItemContainer<Paises>(Paises.class,
-				new ArrayList<Paises>());
+		filterBI = new BeanItem<AlicuotasFiltro>(new AlicuotasFiltro());
+		itemsBIC = new BeanItemContainer<Alicuotas>(Alicuotas.class, new ArrayList<Alicuotas>());
 	}
 
 	// =================================================================================
@@ -370,7 +368,7 @@ public class WPaises extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													Paises item = (Paises) itemsGRD
+													Alicuotas item = (Alicuotas) itemsGRD
 															.getSelectedRow();
 
 													deleteItem(item);
@@ -399,7 +397,7 @@ public class WPaises extends Window {
 		try {
 
 			itemsGRD.select(null);
-			Window window = new Window("Agregar ítem ");
+			Window window = new Window("Agregar ítem");
 			window.setModal(true);
 			window.center();
 			window.setWidth("400px");
@@ -416,8 +414,8 @@ public class WPaises extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				Paises item = (Paises) itemsGRD.getSelectedRow();
-				item.getNumero();
+				Alicuotas item = (Alicuotas) itemsGRD.getSelectedRow();
+				item.getCodigo();
 
 				Window window = new Window("Modificar ítem " + item);
 				window.setModal(true);
@@ -442,14 +440,14 @@ public class WPaises extends Window {
 	private void loadData() {
 		try {
 
-			((Validatable) numeroTXTHL.getComponent(0)).validate();
-			((Validatable) nombreTXTHL.getComponent(0)).validate();
+			((Validatable) codigoTXTHL.getComponent(0)).validate();
+			((Validatable) descripcionTXTHL.getComponent(0)).validate();
 
-			List<Paises> items = queryData();
+			List<Alicuotas> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (Paises item : items) {
+			for (Alicuotas item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -459,9 +457,7 @@ public class WPaises extends Window {
 			modificarBTN.setEnabled(enabled);
 			eliminarBTN.setEnabled(enabled);
 
-			nextPageBTN
-					.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
-
+			nextPageBTN.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
 
 			prevPageBTN.setEnabled(offset >= limit);
 
@@ -475,8 +471,9 @@ public class WPaises extends Window {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
+
 	// metodo que realiza la consulta a la base de datos
-	private List<Paises> queryData() {
+	private List<Alicuotas> queryData() {
 		try {
 
 			System.out.println("Los filtros son "
@@ -494,7 +491,7 @@ public class WPaises extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<Paises> items = mockData(limit, offset,
+			List<Alicuotas> items = mockData(limit, offset,
 					this.filterBI.getBean());
 
 			return items;
@@ -503,15 +500,15 @@ public class WPaises extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Paises>();
+		return new ArrayList<Alicuotas>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(Paises item) {
+	private void deleteItem(Alicuotas item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
-				if (itemsMock.get(i).getNumero().equals(item.getNumero())) {
+				if (itemsMock.get(i).getCodigo().equals(item.getCodigo())) {
 					itemsMock.remove(i);
 					return;
 				}
@@ -525,34 +522,37 @@ public class WPaises extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<Paises> itemsMock = new ArrayList<Paises>();
+	List<Alicuotas> itemsMock = new ArrayList<Alicuotas>();
 
-	private List<Paises> mockData(int limit, int offset, PaisesFiltro filtro) {
+	private List<Alicuotas> mockData(int limit, int offset, AlicuotasFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
-
+			BigDecimal v = new BigDecimal("0.00");
+			BigDecimal v1 = new BigDecimal ("1.01");
 			for (int i = 0; i < 500; i++) {
 
-				Paises item = new Paises();
-
-				item.setNumero(i);
-				item.setNombre("Nombre " + i);
-				item.setAbreviatura("Abreviatura " + i);
+				Alicuotas item = new Alicuotas();
+				v=v.add(v1);
+				item.setCodigo(i);
+				item.setDescripcion("Descripción "+ i);
+				item.setPorcentaje(v);
+				item.setImporteFijo(v);
 
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<Paises> arrayList = new ArrayList<Paises>();
+		ArrayList<Alicuotas> arrayList = new ArrayList<Alicuotas>();
 
-		for (Paises item : itemsMock) {
+		for (Alicuotas item : itemsMock) {
 
-			boolean passesFilterNumero = (filtro.getNumero() == null || item
-					.getNumero().equals(filtro.getNumero()));
 
-			boolean passesFilterNombre = (filtro.getNombre() == null || item
-					.getNombre().toLowerCase()
-					.contains(filtro.getNombre().toLowerCase()));
+			boolean passesFilterNumero = (filtro.getCodigo() == null || item
+					.getCodigo().equals(filtro.getCodigo()));
+
+			boolean passesFilterNombre = (filtro.getDescripcion() == null || item
+					.getDescripcion().toLowerCase()
+					.contains(filtro.getDescripcion().toLowerCase()));
 
 			if (passesFilterNumero && passesFilterNombre) {
 				arrayList.add(item);
@@ -566,6 +566,7 @@ public class WPaises extends Window {
 
 		return arrayList.subList(offset, end);
 	}
+
 
 	// =================================================================================
 
