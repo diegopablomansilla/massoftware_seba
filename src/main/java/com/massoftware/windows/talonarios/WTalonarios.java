@@ -1,4 +1,4 @@
-package com.massoftware.windows.condicionesDeVentas;
+package com.massoftware.windows.talonarios;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,14 +14,12 @@ import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.event.SortEvent;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -30,16 +28,16 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.renderers.HtmlRenderer;
 
-public class WCondicionesDeVentas extends Window {
+
+public class WTalonarios extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<CondicionesDeVentasFiltro> filterBI;
-	private BeanItemContainer<CondicionesDeVentas> itemsBIC;
+	private BeanItem<TalonariosFiltro> filterBI;
+	private BeanItemContainer<Talonarios> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -57,20 +55,20 @@ public class WCondicionesDeVentas extends Window {
 
 	// -------------------------------------------------------------
 
-	private HorizontalLayout condDeVentaTXTHL;
+	private HorizontalLayout numeroTXTHL;
 	private HorizontalLayout detalleTXTHL;
 
 	// -------------------------------------------------------------
 
 	@SuppressWarnings("serial")
-	public WCondicionesDeVentas() {
+	public WTalonarios() {
 		super();
 
 		try {
 
 			buildContainersItems();
 
-			UtilUI.confWinList(this, "Condiciones de ventas");
+			UtilUI.confWinList(this, "Talonarios");
 
 			VerticalLayout content = UtilUI.buildWinContentList();
 
@@ -83,16 +81,16 @@ public class WCondicionesDeVentas extends Window {
 
 			// -----------
 
-			condDeVentaTXTHL = UtilUI.buildTXTHL(filterBI, "condDeVenta", "Número", 
+			numeroTXTHL = UtilUI.buildTXTHL(filterBI, "multiProposito", "Número", 
 					false, 10, -1, 10, false, false, null, false,
 					UtilUI.EQUALS);
 
-			TextField subCtaCteTXT = (TextField) condDeVentaTXTHL.getComponent(0);
+			TextField numeroTXT = (TextField) numeroTXTHL.getComponent(0);
 
-			subCtaCteTXT.addTextChangeListener(new TextChangeListener() {
+			numeroTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						subCtaCteTXT.setValue(event.getText());
+						numeroTXT.setValue(event.getText());
 						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
@@ -101,15 +99,15 @@ public class WCondicionesDeVentas extends Window {
 
 			});
 
-			Button subCtaCteBTN = (Button) condDeVentaTXTHL.getComponent(1);
+			Button numeroBTN = (Button) numeroTXTHL.getComponent(1);
 
-			subCtaCteBTN.addClickListener(e -> {
+			numeroBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
 			// -----------
 
-			detalleTXTHL = UtilUI.buildTXTHL(filterBI, "detalle", "Detalle",
+			detalleTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
 					false, 17, -1, 20, false, false, null, false,
 					UtilUI.CONTAINS_WORDS_AND);
 
@@ -140,7 +138,7 @@ public class WCondicionesDeVentas extends Window {
 				loadData();
 			});
 
-			filaFiltroHL.addComponents(condDeVentaTXTHL, detalleTXTHL, buscarBTN);
+			filaFiltroHL.addComponents(numeroTXTHL, detalleTXTHL, buscarBTN);
 
 			filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
@@ -149,15 +147,15 @@ public class WCondicionesDeVentas extends Window {
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			itemsGRD.setWidth(24f,Unit.EM);
+			itemsGRD.setWidth(480,Unit.PIXELS);
 
-			itemsGRD.setColumns(new Object[] { "condDeVenta", "detalle", "modulo","activo" });
+			itemsGRD.setColumns(new Object[] { "multiProposito", "nombre", "letra","sucursal","proximoNumero" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("condDeVenta"), "Nº", true, 60);
-			UtilUI.confColumn(itemsGRD.getColumn("detalle"), "Detalle", true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("modulo"), "Módulo",true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("activo"), "Activo",true, 50);
-			
+			UtilUI.confColumn(itemsGRD.getColumn("multiProposito"), "Nº", true, 60);
+			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
+			UtilUI.confColumn(itemsGRD.getColumn("letra"), "Letra",true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("sucursal"), "Sucursal",true, 60);
+			UtilUI.confColumn(itemsGRD.getColumn("proximoNumero"), "Próximo Nº",true, 90);
 
 			
 			itemsGRD.setContainerDataSource(itemsBIC);
@@ -165,10 +163,10 @@ public class WCondicionesDeVentas extends Window {
 			// .......
 
 			// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-			 itemsGRD.getColumn("activo").setRenderer(
-			 new HtmlRenderer(),
-			 new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O
-			 .getHtml(), FontAwesome.SQUARE_O.getHtml()));
+//			 itemsGRD.getColumn("activo").setRenderer(
+//			 new HtmlRenderer(),
+//			 new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O
+//			 .getHtml(), FontAwesome.SQUARE_O.getHtml()));
 
 			// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 			// itemsGRD.getColumn("attName").setRenderer(
@@ -183,7 +181,7 @@ public class WCondicionesDeVentas extends Window {
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			order.add(new SortOrder("condDeVenta", SortDirection.ASCENDING));
+			order.add(new SortOrder("multiProposito", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
 
@@ -322,8 +320,8 @@ public class WCondicionesDeVentas extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<CondicionesDeVentasFiltro>(new CondicionesDeVentasFiltro());
-		itemsBIC = new BeanItemContainer<CondicionesDeVentas>(CondicionesDeVentas.class, new ArrayList<CondicionesDeVentas>());
+		filterBI = new BeanItem<TalonariosFiltro>(new TalonariosFiltro());
+		itemsBIC = new BeanItemContainer<Talonarios>(Talonarios.class, new ArrayList<Talonarios>());
 	}
 
 	// =================================================================================
@@ -374,7 +372,7 @@ public class WCondicionesDeVentas extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													CondicionesDeVentas item = (CondicionesDeVentas) itemsGRD.getSelectedRow();
+													Talonarios item = (Talonarios) itemsGRD.getSelectedRow();
 
 													deleteItem(item);
 
@@ -419,8 +417,8 @@ public class WCondicionesDeVentas extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				CondicionesDeVentas item = (CondicionesDeVentas) itemsGRD.getSelectedRow();
-				item.getCondDeVenta();
+				Talonarios item = (Talonarios) itemsGRD.getSelectedRow();
+				item.getMultiProposito();
 
 				Window window = new Window("Modificar ítem " + item);
 				window.setModal(true);
@@ -445,14 +443,14 @@ public class WCondicionesDeVentas extends Window {
 	private void loadData() {
 		try {
 
-			((Validatable) condDeVentaTXTHL.getComponent(0)).validate();
+			((Validatable) numeroTXTHL.getComponent(0)).validate();
 			((Validatable) detalleTXTHL.getComponent(0)).validate();
 
-			List<CondicionesDeVentas> items = queryData();
+			List<Talonarios> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (CondicionesDeVentas item : items) {
+			for (Talonarios item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -477,7 +475,7 @@ public class WCondicionesDeVentas extends Window {
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
 	// metodo que realiza la consulta a la base de datos
-	private List<CondicionesDeVentas> queryData() {
+	private List<Talonarios> queryData() {
 		try {
 
 			System.out.println("Los filtros son "
@@ -495,7 +493,7 @@ public class WCondicionesDeVentas extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<CondicionesDeVentas> items = mockData(limit,offset,this.filterBI.getBean());
+			List<Talonarios> items = mockData(limit,offset,this.filterBI.getBean());
 
 			return items;
 
@@ -503,15 +501,15 @@ public class WCondicionesDeVentas extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<CondicionesDeVentas>();
+		return new ArrayList<Talonarios>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(CondicionesDeVentas item) {
+	private void deleteItem(Talonarios item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
-				if (itemsMock.get(i).getCondDeVenta()==item.getCondDeVenta()) {
+				if (itemsMock.get(i).getMultiProposito()==item.getMultiProposito()) {
 					itemsMock.remove(i);
 					return;
 				}
@@ -525,44 +523,41 @@ public class WCondicionesDeVentas extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<CondicionesDeVentas> itemsMock = new ArrayList<CondicionesDeVentas>();
+	List<Talonarios> itemsMock = new ArrayList<Talonarios>();
 
 
-	private List<CondicionesDeVentas> mockData(int limit, int offset, CondicionesDeVentasFiltro filtro) {
+	private List<Talonarios> mockData(int limit, int offset, TalonariosFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
 			BigDecimal v = new BigDecimal("0.00");
 			BigDecimal v1 = new BigDecimal ("1.01");
 			for (int i = 1; i < 99; i++) {
 
-				CondicionesDeVentas item = new CondicionesDeVentas();
+				Talonarios item = new Talonarios();
 				v=v.add(v1);
 				
-				item.setCondDeVenta(i);
-				item.setDetalle("Detalle " + i);
-				item.setDetalleTexto("Det. Texto"+i);
-				item.setCtaCteDiasTolerancia(i);
-				item.setDiasProntoPago(i);
-				item.setEsContado(true);
-				item.setLlamaFondo(true);
-				item.setModulo("V");
-				item.setActivo(true);
+				item.setMultiProposito(i);
+				item.setNombre("Nombre " + i);
+				item.setLetra("Letra"+i);
+				item.setSucursal(i);
+				item.setProximoNumero(i);
+
 				
 				
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<CondicionesDeVentas> arrayList = new ArrayList<CondicionesDeVentas>();
+		ArrayList<Talonarios> arrayList = new ArrayList<Talonarios>();
 
-		for (CondicionesDeVentas item : itemsMock) {
+		for (Talonarios item : itemsMock) {
 
-			boolean passesFilterNumero = (filtro.getCondDeVenta() == null || item
-					.getCondDeVenta().equals(filtro.getCondDeVenta()));
+			boolean passesFilterNumero = (filtro.getMultiProposito() == null || item
+					.getMultiProposito().equals(filtro.getMultiProposito()));
 
-			boolean passesFilterNombre = (filtro.getDetalle() == null || item
-					.getDetalle().toLowerCase()
-					.contains(filtro.getDetalle().toLowerCase()));
+			boolean passesFilterNombre = (filtro.getNombre() == null || item
+					.getNombre().toLowerCase()
+					.contains(filtro.getNombre().toLowerCase()));
 
 			if (passesFilterNumero && passesFilterNombre) {
 				arrayList.add(item);

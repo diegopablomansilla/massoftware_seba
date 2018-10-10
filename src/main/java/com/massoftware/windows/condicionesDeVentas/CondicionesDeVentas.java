@@ -5,7 +5,7 @@ import com.massoftware.windows.UtilModel;
 
 
 public class CondicionesDeVentas {
-	private char modulo;
+	private String modulo;
 	private Integer condDeVenta;
 	private String detalle;
 	private String detalleTexto;
@@ -19,13 +19,13 @@ public class CondicionesDeVentas {
 	
 
 
-	public char getModulo() {
+	public String getModulo() {
 		return modulo;
 	}
 
 
-	public void setModulo(char modulo) {
-		this.modulo = modulo;
+	public void setModulo(String modulo) {
+		this.modulo = UtilModel.format(modulo);
 	}
 
 

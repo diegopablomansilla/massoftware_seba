@@ -1,6 +1,5 @@
-package com.massoftware.windows.condicionesDeVentas;
+package com.massoftware.windows.cuidades;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,37 +8,37 @@ import java.util.Map;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
+import com.massoftware.windows.paises.Paises;
+import com.massoftware.windows.provincias.Provincias;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.event.SortEvent;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.renderers.HtmlRenderer;
 
-public class WCondicionesDeVentas extends Window {
+public class WCiudades extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<CondicionesDeVentasFiltro> filterBI;
-	private BeanItemContainer<CondicionesDeVentas> itemsBIC;
+	private BeanItem<CiudadesFiltro> filterBI;
+	private BeanItemContainer<Ciudades> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -57,20 +56,20 @@ public class WCondicionesDeVentas extends Window {
 
 	// -------------------------------------------------------------
 
-	private HorizontalLayout condDeVentaTXTHL;
-	private HorizontalLayout detalleTXTHL;
+	private HorizontalLayout numeroTXTHL;
+	private HorizontalLayout nombreTXTHL;
 
 	// -------------------------------------------------------------
 
 	@SuppressWarnings("serial")
-	public WCondicionesDeVentas() {
+	public WCiudades() {
 		super();
 
 		try {
 
 			buildContainersItems();
 
-			UtilUI.confWinList(this, "Condiciones de ventas");
+			UtilUI.confWinList(this, "Ciudades");
 
 			VerticalLayout content = UtilUI.buildWinContentList();
 
@@ -83,16 +82,51 @@ public class WCondicionesDeVentas extends Window {
 
 			// -----------
 
-			condDeVentaTXTHL = UtilUI.buildTXTHL(filterBI, "condDeVenta", "Número", 
-					false, 10, -1, 10, false, false, null, false,
-					UtilUI.EQUALS);
+			HorizontalLayout paisesCBXHL = UtilUI.buildCBHL(filterBI, "pais",
+					"País", false, true, Paises.class, queryDataPaises());
 
-			TextField subCtaCteTXT = (TextField) condDeVentaTXTHL.getComponent(0);
+			ComboBox paisesCBX = (ComboBox) paisesCBXHL.getComponent(0);
 
-			subCtaCteTXT.addTextChangeListener(new TextChangeListener() {
+			paisesCBX.addValueChangeListener(e -> {
+				this.loadDataResetPaged();
+			});
+
+			Button paisBTN = (Button) paisesCBXHL.getComponent(1);
+
+			paisBTN.addClickListener(e -> {
+				this.loadDataResetPaged();
+			});
+			
+			
+			// -----------
+
+			HorizontalLayout provinciasCBXHL = UtilUI.buildCBHL(filterBI, "provincia",
+					"Provincia", false, true, Paises.class, queryDataProvincias());
+
+			ComboBox provinciasCBX = (ComboBox) provinciasCBXHL.getComponent(0);
+
+			provinciasCBX.addValueChangeListener(e -> {
+				this.loadDataResetPaged();
+			});
+
+			Button provinciaBTN = (Button) provinciasCBXHL.getComponent(1);
+
+			provinciaBTN.addClickListener(e -> {
+				this.loadDataResetPaged();
+			});
+
+			// -----------
+
+			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero",
+					"Numero", false, 5, -1, 3, false, false, null, false,
+					UtilUI.EQUALS, 0, 255);
+
+			TextField numeroTXT = (TextField) numeroTXTHL.getComponent(0);
+
+			numeroTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						subCtaCteTXT.setValue(event.getText());
+						numeroTXT.setValue(event.getText());
 						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
@@ -101,19 +135,19 @@ public class WCondicionesDeVentas extends Window {
 
 			});
 
-			Button subCtaCteBTN = (Button) condDeVentaTXTHL.getComponent(1);
+			Button numeroBTN = (Button) numeroTXTHL.getComponent(1);
 
-			subCtaCteBTN.addClickListener(e -> {
+			numeroBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
 			// -----------
 
-			detalleTXTHL = UtilUI.buildTXTHL(filterBI, "detalle", "Detalle",
-					false, 17, -1, 20, false, false, null, false,
+			nombreTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
+					false, 20, -1, 35, false, false, null, false,
 					UtilUI.CONTAINS_WORDS_AND);
 
-			TextField nombreTXT = (TextField) detalleTXTHL.getComponent(0);
+			TextField nombreTXT = (TextField) nombreTXTHL.getComponent(0);
 
 			nombreTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
@@ -127,7 +161,7 @@ public class WCondicionesDeVentas extends Window {
 
 			});
 
-			Button nombreBTN = (Button) detalleTXTHL.getComponent(1);
+			Button nombreBTN = (Button) nombreTXTHL.getComponent(1);
 
 			nombreBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
@@ -140,35 +174,33 @@ public class WCondicionesDeVentas extends Window {
 				loadData();
 			});
 
-			filaFiltroHL.addComponents(condDeVentaTXTHL, detalleTXTHL, buscarBTN);
+			filaFiltroHL.addComponents(paisesCBXHL, provinciasCBXHL, numeroTXTHL, nombreTXTHL,buscarBTN);
 
-			filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
+			filaFiltroHL.setComponentAlignment(buscarBTN,Alignment.MIDDLE_RIGHT);
 
 			// =======================================================
 			// -------------------------------------------------------
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			itemsGRD.setWidth(24f,Unit.EM);
+			itemsGRD.setWidth("390px");
+			itemsGRD.setWidth("100%");
 
-			itemsGRD.setColumns(new Object[] { "condDeVenta", "detalle", "modulo","activo" });
+			itemsGRD.setColumns(new Object[] { "nombre", "numeroProvincia", "numeroPais" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("condDeVenta"), "Nº", true, 60);
-			UtilUI.confColumn(itemsGRD.getColumn("detalle"), "Detalle", true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("modulo"), "Módulo",true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("activo"), "Activo",true, 50);
-			
+			UtilUI.confColumn(itemsGRD.getColumn("numeroPais"), "País", true,210);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroProvincia"), "Provincia", true,210);
+			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Ciudad", true, 300);
 
-			
 			itemsGRD.setContainerDataSource(itemsBIC);
 
 			// .......
 
 			// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-			 itemsGRD.getColumn("activo").setRenderer(
-			 new HtmlRenderer(),
-			 new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O
-			 .getHtml(), FontAwesome.SQUARE_O.getHtml()));
+			// itemsGRD.getColumn("attName").setRenderer(
+			// new HtmlRenderer(),
+			// new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O
+			// .getHtml(), FontAwesome.SQUARE_O.getHtml()));
 
 			// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 			// itemsGRD.getColumn("attName").setRenderer(
@@ -183,7 +215,9 @@ public class WCondicionesDeVentas extends Window {
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			order.add(new SortOrder("condDeVenta", SortDirection.ASCENDING));
+			order.add(new SortOrder("numeroPais", SortDirection.ASCENDING));
+			order.add(new SortOrder("numeroProvincia", SortDirection.ASCENDING));
+			order.add(new SortOrder("nombre", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
 
@@ -237,12 +271,11 @@ public class WCondicionesDeVentas extends Window {
 
 			content.addComponents(filaFiltroHL, itemsGRD, filaBotoneraPagedHL,filaBotoneraHL, filaBotonera2HL);
 
-			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_LEFT);
+			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
 			content.setComponentAlignment(filaBotoneraPagedHL,Alignment.MIDDLE_RIGHT);
 			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
 			content.setComponentAlignment(filaBotonera2HL,Alignment.MIDDLE_RIGHT);
 
-			
 			this.setContent(content);
 
 			// =======================================================
@@ -322,8 +355,8 @@ public class WCondicionesDeVentas extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<CondicionesDeVentasFiltro>(new CondicionesDeVentasFiltro());
-		itemsBIC = new BeanItemContainer<CondicionesDeVentas>(CondicionesDeVentas.class, new ArrayList<CondicionesDeVentas>());
+		filterBI = new BeanItem<CiudadesFiltro>(new CiudadesFiltro());
+		itemsBIC = new BeanItemContainer<Ciudades>(Ciudades.class,new ArrayList<Ciudades>());
 	}
 
 	// =================================================================================
@@ -374,7 +407,8 @@ public class WCondicionesDeVentas extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													CondicionesDeVentas item = (CondicionesDeVentas) itemsGRD.getSelectedRow();
+													Ciudades item = (Ciudades) itemsGRD
+															.getSelectedRow();
 
 													deleteItem(item);
 
@@ -402,7 +436,7 @@ public class WCondicionesDeVentas extends Window {
 		try {
 
 			itemsGRD.select(null);
-			Window window = new Window("Agregar ítem ");
+			Window window = new Window("Agregar ítem");
 			window.setModal(true);
 			window.center();
 			window.setWidth("400px");
@@ -419,8 +453,8 @@ public class WCondicionesDeVentas extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				CondicionesDeVentas item = (CondicionesDeVentas) itemsGRD.getSelectedRow();
-				item.getCondDeVenta();
+				Ciudades item = (Ciudades) itemsGRD.getSelectedRow();
+				item.getNumero();
 
 				Window window = new Window("Modificar ítem " + item);
 				window.setModal(true);
@@ -445,14 +479,14 @@ public class WCondicionesDeVentas extends Window {
 	private void loadData() {
 		try {
 
-			((Validatable) condDeVentaTXTHL.getComponent(0)).validate();
-			((Validatable) detalleTXTHL.getComponent(0)).validate();
+			((Validatable) numeroTXTHL.getComponent(0)).validate();
+			((Validatable) nombreTXTHL.getComponent(0)).validate();
 
-			List<CondicionesDeVentas> items = queryData();
+			List<Ciudades> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (CondicionesDeVentas item : items) {
+			for (Ciudades item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -476,12 +510,35 @@ public class WCondicionesDeVentas extends Window {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
-	// metodo que realiza la consulta a la base de datos
-	private List<CondicionesDeVentas> queryData() {
+	private List<Paises> queryDataPaises() {
 		try {
 
-			System.out.println("Los filtros son "
-					+ this.filterBI.getBean().toString());
+			return mockDataPaises();
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+
+		return new ArrayList<Paises>();
+	}
+
+	private List<Provincias> queryDataProvincias() {
+		try {
+
+			return mockDataProvincias();
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+
+		return new ArrayList<Provincias>();
+	}
+	
+	// metodo que realiza la consulta a la base de datos
+	private List<Ciudades> queryData() {
+		try {
+
+			System.out.println("Los filtros son "+ this.filterBI.getBean().toString());
 
 			// Notification.show("Los filtros son "
 			// + this.filterBI.getBean().toString());
@@ -495,7 +552,8 @@ public class WCondicionesDeVentas extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<CondicionesDeVentas> items = mockData(limit,offset,this.filterBI.getBean());
+			List<Ciudades> items = mockData(limit, offset,
+					this.filterBI.getBean());
 
 			return items;
 
@@ -503,15 +561,15 @@ public class WCondicionesDeVentas extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<CondicionesDeVentas>();
+		return new ArrayList<Ciudades>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(CondicionesDeVentas item) {
+	private void deleteItem(Ciudades item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
-				if (itemsMock.get(i).getCondDeVenta()==item.getCondDeVenta()) {
+				if (itemsMock.get(i).getNumero().equals(item.getNumero())) {
 					itemsMock.remove(i);
 					return;
 				}
@@ -525,46 +583,46 @@ public class WCondicionesDeVentas extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<CondicionesDeVentas> itemsMock = new ArrayList<CondicionesDeVentas>();
+	List<Ciudades> itemsMock = new ArrayList<Ciudades>();
 
-
-	private List<CondicionesDeVentas> mockData(int limit, int offset, CondicionesDeVentasFiltro filtro) {
+	private List<Ciudades> mockData(int limit, int offset,
+			CiudadesFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
-			BigDecimal v = new BigDecimal("0.00");
-			BigDecimal v1 = new BigDecimal ("1.01");
-			for (int i = 1; i < 99; i++) {
 
-				CondicionesDeVentas item = new CondicionesDeVentas();
-				v=v.add(v1);
+			for (int i = 0; i < 500; i++) {
+
+				Ciudades item = new Ciudades();
+
+				item.setNumeroPais(i);
+				item.setNumeroProvincia(i);
+				item.setNumero(i);
+				item.setNombre("Nombre " + i);
 				
-				item.setCondDeVenta(i);
-				item.setDetalle("Detalle " + i);
-				item.setDetalleTexto("Det. Texto"+i);
-				item.setCtaCteDiasTolerancia(i);
-				item.setDiasProntoPago(i);
-				item.setEsContado(true);
-				item.setLlamaFondo(true);
-				item.setModulo("V");
-				item.setActivo(true);
-				
-				
+
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<CondicionesDeVentas> arrayList = new ArrayList<CondicionesDeVentas>();
+		ArrayList<Ciudades> arrayList = new ArrayList<Ciudades>();
 
-		for (CondicionesDeVentas item : itemsMock) {
+		for (Ciudades item : itemsMock) {
 
-			boolean passesFilterNumero = (filtro.getCondDeVenta() == null || item
-					.getCondDeVenta().equals(filtro.getCondDeVenta()));
+			boolean passesFilterNumeroPais = (filtro.getPais() == null || item
+					.getNumeroPais().equals(filtro.getPais().getNumero()));
 
-			boolean passesFilterNombre = (filtro.getDetalle() == null || item
-					.getDetalle().toLowerCase()
-					.contains(filtro.getDetalle().toLowerCase()));
+			boolean passesFilterNumeroProvincia = (filtro.getProvincia() == null || item
+					.getNumeroProvincia().equals(filtro.getProvincia().getNumero()));
+			
+			boolean passesFilterNumero = (filtro.getNumero() == null || item
+					.getNumero().equals(filtro.getNumero()));
 
-			if (passesFilterNumero && passesFilterNombre) {
+			boolean passesFilterNombre = (filtro.getNombre() == null || item
+					.getNombre().toLowerCase()
+					.contains(filtro.getNombre().toLowerCase()));
+
+			if (passesFilterNumeroPais && passesFilterNumeroProvincia && passesFilterNumero
+					&& passesFilterNombre) {
 				arrayList.add(item);
 			}
 		}
@@ -577,6 +635,47 @@ public class WCondicionesDeVentas extends Window {
 		return arrayList.subList(offset, end);
 	}
 
+	private List<Paises> mockDataPaises() {
+
+		List<Paises> itemsMock = new ArrayList<Paises>();
+
+		if (itemsMock.size() == 0) {
+
+			for (int i = 0; i < 500; i++) {
+
+				Paises item = new Paises();
+
+				item.setNumero(i);
+				item.setNombre("Nombre " + i);
+				item.setAbreviatura("Abreviatura " + i);
+
+				itemsMock.add(item);
+			}
+		}
+
+		return itemsMock;
+	}
+
+	private List<Provincias> mockDataProvincias() {
+
+		List<Provincias> itemsMock = new ArrayList<Provincias>();
+
+		if (itemsMock.size() == 0) {
+
+			for (int i = 0; i < 500; i++) {
+
+				Provincias item = new Provincias();
+
+				item.setNumero(i);
+				item.setNombre("Nombre " + i);
+				item.setAbreviatura("Abreviatura " + i);
+
+				itemsMock.add(item);
+			}
+		}
+
+		return itemsMock;
+	}
 	// =================================================================================
 
 } // END CLASS

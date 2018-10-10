@@ -3,6 +3,7 @@ package com.massoftware;
 import com.massoftware.windows.alicuotas.WAlicuotas;
 import com.massoftware.windows.cargas.WCargas;
 import com.massoftware.windows.condicionesDeVentas.WCondicionesDeVentas;
+import com.massoftware.windows.cuidades.WCiudades;
 import com.massoftware.windows.depositos.WDepositos;
 import com.massoftware.windows.motBloqueosClie.WMotBloqueosClie;
 import com.massoftware.windows.motivosComentarios.WMotivosComentarios;
@@ -11,6 +12,7 @@ import com.massoftware.windows.paises.WPaises;
 import com.massoftware.windows.provincias.WProvincias;
 import com.massoftware.windows.subCtaCte.WSubCtaCte;
 import com.massoftware.windows.sucursales.WSucursales;
+import com.massoftware.windows.talonarios.WTalonarios;
 import com.massoftware.windows.tiposDocumentosAfip.WTiposDocumentosAfip;
 import com.massoftware.windows.zonas.WZonas;
 import com.vaadin.ui.MenuBar;
@@ -51,6 +53,9 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Motivos comentarios", openMotivosComentariosCmd());
 		a1.addItem("Motivos notas de créditos", openMotivosNotasCreditoCmd());
 		a1.addItem("Depositos", openDepositosCmd());
+		a1.addItem("Talonarios", openTalonariosCmd());
+		a1.addItem("Ciudades", openCiudadesCmd());
+		
 		return menubar;
 	}
 
@@ -276,4 +281,43 @@ public class SuperMenu extends AbstractMenu {
 			}
 		};
 	}
+	
+	protected Command openTalonariosCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WTalonarios();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	
+	protected Command openCiudadesCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WCiudades();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	
+	
+	
 }
