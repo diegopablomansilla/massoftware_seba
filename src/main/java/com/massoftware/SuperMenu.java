@@ -3,6 +3,7 @@ package com.massoftware;
 import com.massoftware.windows.alicuotas.WAlicuotas;
 import com.massoftware.windows.cargas.WCargas;
 import com.massoftware.windows.condicionesDeVentas.WCondicionesDeVentas;
+import com.massoftware.windows.depositos.WDepositos;
 import com.massoftware.windows.motBloqueosClie.WMotBloqueosClie;
 import com.massoftware.windows.motivosComentarios.WMotivosComentarios;
 import com.massoftware.windows.motivosNotasDeCredito.WMotivosNotasDeCreditos;
@@ -49,7 +50,7 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Tipos documentos AFIP", openTiposDocAfipCmd());
 		a1.addItem("Motivos comentarios", openMotivosComentariosCmd());
 		a1.addItem("Motivos notas de créditos", openMotivosNotasCreditoCmd());
-		
+		a1.addItem("Depositos", openDepositosCmd());
 		return menubar;
 	}
 
@@ -259,4 +260,20 @@ public class SuperMenu extends AbstractMenu {
 		};
 	}
 	
+	protected Command openDepositosCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WDepositos();
+				getUI().addWindow(window);
+			}
+		};
+	}
 }
