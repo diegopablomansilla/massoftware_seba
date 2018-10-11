@@ -1,5 +1,6 @@
-package com.massoftware.windows.cuidades;
+package com.massoftware.windows.tiposDeClientes;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +9,6 @@ import java.util.Map;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.paises.Paises;
-import com.massoftware.windows.provincias.Provincias;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
@@ -24,21 +23,20 @@ import com.vaadin.event.SortEvent;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class WCiudades extends Window {
+public class WTiposDeClientes extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<CiudadesFiltro> filterBI;
-	private BeanItemContainer<Ciudades> itemsBIC;
+	private BeanItem<TiposDeClientesFiltro> filterBI;
+	private BeanItemContainer<TiposDeClientes> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -56,21 +54,20 @@ public class WCiudades extends Window {
 
 	// -------------------------------------------------------------
 
-	private HorizontalLayout numeroTXTHL;
-	private HorizontalLayout nombreTXTHL;
+	private HorizontalLayout codigoTXTHL;
+	private HorizontalLayout descripcionTXTHL;
 
-	
 	// -------------------------------------------------------------
 
 	@SuppressWarnings("serial")
-	public WCiudades() {
+	public WTiposDeClientes() {
 		super();
 
 		try {
 
 			buildContainersItems();
 
-			UtilUI.confWinList(this, "Ciudades");
+			UtilUI.confWinList(this, "Tipos de clientes");
 
 			VerticalLayout content = UtilUI.buildWinContentList();
 
@@ -83,55 +80,16 @@ public class WCiudades extends Window {
 
 			// -----------
 
-			HorizontalLayout paisesCBXHL = UtilUI.buildCBHL(filterBI, "pais",
-					"País", false, true, Paises.class, queryDataPaises());
-
-			ComboBox paisesCBX = (ComboBox) paisesCBXHL.getComponent(0);
-
-			
-			
-			paisesCBX.addValueChangeListener(e -> {
-				
-				this.loadDataResetPaged();
-				
-			});
-
-			Button paisBTN = (Button) paisesCBXHL.getComponent(1);
-
-			paisBTN.addClickListener(e -> {
-				this.loadDataResetPaged();
-			});
-			
-			
-			// -----------
-
-			HorizontalLayout provinciasCBXHL = UtilUI.buildCBHL(filterBI, "provincia",
-					"Provincia", false, true, Provincias.class, queryDataProvincias());
-
-			ComboBox provinciasCBX = (ComboBox) provinciasCBXHL.getComponent(0);
-
-			provinciasCBX.addValueChangeListener(e -> {
-				this.loadDataResetPaged();
-			});
-
-			Button provinciaBTN = (Button) provinciasCBXHL.getComponent(1);
-
-			provinciaBTN.addClickListener(e -> {
-				this.loadDataResetPaged();
-			});
-
-			// -----------
-
-			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero",
-					"Numero", false, 5, -1, 3, false, false, null, false,
+			codigoTXTHL = UtilUI.buildTXTHLInteger(filterBI, "tipoDeCliente",
+					"Número", false, 5, -1, 3, false, false, null, false,
 					UtilUI.EQUALS, 0, 255);
 
-			TextField numeroTXT = (TextField) numeroTXTHL.getComponent(0);
+			TextField codigoTXT = (TextField) codigoTXTHL.getComponent(0);
 
-			numeroTXT.addTextChangeListener(new TextChangeListener() {
+			codigoTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						numeroTXT.setValue(event.getText());
+						codigoTXT.setValue(event.getText());
 						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
@@ -140,24 +98,24 @@ public class WCiudades extends Window {
 
 			});
 
-			Button numeroBTN = (Button) numeroTXTHL.getComponent(1);
+			Button codigoBTN = (Button) codigoTXTHL.getComponent(1);
 
-			numeroBTN.addClickListener(e -> {
+			codigoBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
 			// -----------
 
-			nombreTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
-					false, 20, -1, 35, false, false, null, false,
+			descripcionTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
+					false, 20, -1, 25, false, false, null, false,
 					UtilUI.CONTAINS_WORDS_AND);
 
-			TextField nombreTXT = (TextField) nombreTXTHL.getComponent(0);
+			TextField descripcionTXT = (TextField) descripcionTXTHL.getComponent(0);
 
-			nombreTXT.addTextChangeListener(new TextChangeListener() {
+			descripcionTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						nombreTXT.setValue(event.getText());
+						descripcionTXT.setValue(event.getText());
 						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
@@ -166,9 +124,9 @@ public class WCiudades extends Window {
 
 			});
 
-			Button nombreBTN = (Button) nombreTXTHL.getComponent(1);
+			Button descripcionBTN = (Button) descripcionTXTHL.getComponent(1);
 
-			nombreBTN.addClickListener(e -> {
+			descripcionBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
@@ -179,7 +137,7 @@ public class WCiudades extends Window {
 				loadData();
 			});
 
-			filaFiltroHL.addComponents(paisesCBXHL, provinciasCBXHL, numeroTXTHL, nombreTXTHL,buscarBTN);
+			filaFiltroHL.addComponents(codigoTXTHL, descripcionTXTHL,buscarBTN);
 
 			filaFiltroHL.setComponentAlignment(buscarBTN,Alignment.MIDDLE_RIGHT);
 
@@ -188,14 +146,14 @@ public class WCiudades extends Window {
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			itemsGRD.setWidth("390px");
-			itemsGRD.setWidth("100%");
+			itemsGRD.setWidth("270px");
 
-			itemsGRD.setColumns(new Object[] { "nombre", "numeroProvincia", "numeroPais" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("numeroPais"), "País", true,210);
-			UtilUI.confColumn(itemsGRD.getColumn("numeroProvincia"), "Provincia", true,210);
-			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Ciudad", true, 300);
+			itemsGRD.setColumns(new Object[] { "tipoDeCliente", "nombre" });
+
+			UtilUI.confColumn(itemsGRD.getColumn("tipoDeCliente"), "Número", true,50);
+			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre.", true, 200);
+
 
 			itemsGRD.setContainerDataSource(itemsBIC);
 
@@ -220,9 +178,7 @@ public class WCiudades extends Window {
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			order.add(new SortOrder("numeroPais", SortDirection.ASCENDING));
-			order.add(new SortOrder("numeroProvincia", SortDirection.ASCENDING));
-			order.add(new SortOrder("nombre", SortDirection.ASCENDING));
+			order.add(new SortOrder("tipoDeCliente", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
 
@@ -274,12 +230,11 @@ public class WCiudades extends Window {
 
 			// -------------------------------------------------------
 
-			content.addComponents(filaFiltroHL, itemsGRD, filaBotoneraPagedHL,filaBotoneraHL, filaBotonera2HL);
+			content.addComponents(itemsGRD, filaBotoneraPagedHL, filaBotoneraHL, filaBotonera2HL);
 
-			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
-			content.setComponentAlignment(filaBotoneraPagedHL,Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotoneraPagedHL, Alignment.MIDDLE_RIGHT);
 			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
-			content.setComponentAlignment(filaBotonera2HL,Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
 
 			this.setContent(content);
 
@@ -360,8 +315,8 @@ public class WCiudades extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<CiudadesFiltro>(new CiudadesFiltro());
-		itemsBIC = new BeanItemContainer<Ciudades>(Ciudades.class,new ArrayList<Ciudades>());
+		filterBI = new BeanItem<TiposDeClientesFiltro>(new TiposDeClientesFiltro());
+		itemsBIC = new BeanItemContainer<TiposDeClientes>(TiposDeClientes.class, new ArrayList<TiposDeClientes>());
 	}
 
 	// =================================================================================
@@ -412,7 +367,7 @@ public class WCiudades extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													Ciudades item = (Ciudades) itemsGRD
+													TiposDeClientes item = (TiposDeClientes) itemsGRD
 															.getSelectedRow();
 
 													deleteItem(item);
@@ -458,8 +413,8 @@ public class WCiudades extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				Ciudades item = (Ciudades) itemsGRD.getSelectedRow();
-				item.getNumero();
+				TiposDeClientes item = (TiposDeClientes) itemsGRD.getSelectedRow();
+				item.getTipoDeCliente();
 
 				Window window = new Window("Modificar ítem " + item);
 				window.setModal(true);
@@ -484,14 +439,14 @@ public class WCiudades extends Window {
 	private void loadData() {
 		try {
 
-			((Validatable) numeroTXTHL.getComponent(0)).validate();
-			((Validatable) nombreTXTHL.getComponent(0)).validate();
+			((Validatable) codigoTXTHL.getComponent(0)).validate();
+			((Validatable) descripcionTXTHL.getComponent(0)).validate();
 
-			List<Ciudades> items = queryData();
+			List<TiposDeClientes> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (Ciudades item : items) {
+			for (TiposDeClientes item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -515,48 +470,28 @@ public class WCiudades extends Window {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
-	private List<Paises> queryDataPaises() {
-		try {
 
-			return mockDataPaises();
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new ArrayList<Paises>();
-	}
-
-	private List<Provincias> queryDataProvincias() {
-		try {
-
-			return mockDataProvincias();
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new ArrayList<Provincias>();
-	}
-	
 	// metodo que realiza la consulta a la base de datos
-	private List<Ciudades> queryData() {
+	private List<TiposDeClientes> queryData() {
 		try {
 
-			System.out.println("Los filtros son "+ this.filterBI.getBean().toString());
+			System.out.println("Los filtros son "
+					+ this.filterBI.getBean().toString());
 
-			// Notification.show("Los filtros son " + this.filterBI.getBean().toString());
+			// Notification.show("Los filtros son "
+			// + this.filterBI.getBean().toString());
 
 			Map<String, Boolean> orderBy = new HashMap<String, Boolean>();
 
 			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
 				orderBy.put(sortOrder.getPropertyId().toString(), sortOrder
 						.getDirection().toString().equals("ASCENDING"));
-				
-				System.err.println(sortOrder.getPropertyId() + " " + sortOrder.getDirection());
+				System.err.println(sortOrder.getPropertyId() + " "
+						+ sortOrder.getDirection());
 			}
 
-			List<Ciudades> items = mockData(limit, offset, this.filterBI.getBean());
+			List<TiposDeClientes> items = mockData(limit, offset,
+					this.filterBI.getBean());
 
 			return items;
 
@@ -564,15 +499,15 @@ public class WCiudades extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Ciudades>();
+		return new ArrayList<TiposDeClientes>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(Ciudades item) {
+	private void deleteItem(TiposDeClientes item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
-				if (itemsMock.get(i).getNumero().equals(item.getNumero())) {
+				if (itemsMock.get(i).getTipoDeCliente().equals(item.getTipoDeCliente())) {
 					itemsMock.remove(i);
 					return;
 				}
@@ -586,45 +521,38 @@ public class WCiudades extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<Ciudades> itemsMock = new ArrayList<Ciudades>();
+	List<TiposDeClientes> itemsMock = new ArrayList<TiposDeClientes>();
 
-	private List<Ciudades> mockData(int limit, int offset, CiudadesFiltro filtro) {
+	private List<TiposDeClientes> mockData(int limit, int offset, TiposDeClientesFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
-
+			BigDecimal v = new BigDecimal("0.00");
+			BigDecimal v1 = new BigDecimal ("1.01");
 			for (int i = 0; i < 500; i++) {
 
-				Ciudades item = new Ciudades();
+				TiposDeClientes item = new TiposDeClientes();
+				v=v.add(v1);
+				item.setTipoDeCliente(i);
+				item.setNombre("Descripción "+ i);
 
-				item.setNumeroPais(i);
-				item.setNumeroProvincia(i);
-				item.setNumero(i);
-				item.setNombre("Nombre " + i);
-				
 
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<Ciudades> arrayList = new ArrayList<Ciudades>();
+		ArrayList<TiposDeClientes> arrayList = new ArrayList<TiposDeClientes>();
 
-		for (Ciudades item : itemsMock) {
+		for (TiposDeClientes item : itemsMock) {
 
-			boolean passesFilterNumeroPais = (filtro.getPais() == null || item
-					.getNumeroPais().equals(filtro.getPais().getNumero()));
 
-			boolean passesFilterNumeroProvincia = (filtro.getProvincia() == null || item
-					.getNumeroProvincia().equals(filtro.getProvincia().getNumero()));
-			
-			boolean passesFilterNumero = (filtro.getNumero() == null || item
-					.getNumero().equals(filtro.getNumero()));
+			boolean passesFilterNumero = (filtro.getTipoDeCliente() == null || item
+					.getTipoDeCliente().equals(filtro.getTipoDeCliente()));
 
 			boolean passesFilterNombre = (filtro.getNombre() == null || item
 					.getNombre().toLowerCase()
 					.contains(filtro.getNombre().toLowerCase()));
 
-			if (passesFilterNumeroPais && passesFilterNumeroProvincia && passesFilterNumero
-					&& passesFilterNombre) {
+			if (passesFilterNumero && passesFilterNombre) {
 				arrayList.add(item);
 			}
 		}
@@ -637,47 +565,7 @@ public class WCiudades extends Window {
 		return arrayList.subList(offset, end);
 	}
 
-	private List<Paises> mockDataPaises() {
 
-		List<Paises> itemsMock = new ArrayList<Paises>();
-
-		if (itemsMock.size() == 0) {
-
-			for (int i = 0; i < 500; i++) {
-
-				Paises item = new Paises();
-
-				item.setNumero(i);
-				item.setNombre("Pais " + i);
-				item.setAbreviatura("Abreviatura " + i);
-
-				itemsMock.add(item);
-			}
-		}
-
-		return itemsMock;
-	}
-
-	private List<Provincias> mockDataProvincias() {
-
-		List<Provincias> itemsMock = new ArrayList<Provincias>();
-
-		if (itemsMock.size() == 0) {
-
-			for (int i = 0; i < 500; i++) {
-
-				Provincias item = new Provincias();
-
-				item.setNumero(i);
-				item.setNombre("Provincia " + i);
-				item.setAbreviatura("Abreviatura " + i);
-
-				itemsMock.add(item);
-			}
-		}
-
-		return itemsMock;
-	}
 	// =================================================================================
 
 } // END CLASS

@@ -9,8 +9,7 @@ import java.util.Map;
 
 import org.vaadin.inputmask.InputMask;
 
-import com.massoftware.frontend.custom.windows.ControlFactory;
-import com.massoftware.frontend.util.UtilDate;
+
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.Converter;
@@ -866,6 +865,13 @@ public class UtilUI {
 
 		return cb;
 	}
+	
+	public static OptionGroup buildOG() {
+		OptionGroup og = new OptionGroup();
+		og.addStyleName(ValoTheme.OPTIONGROUP_SMALL);
+
+		return og;
+	}
 
 	@SuppressWarnings("rawtypes")
 	public static OptionGroup buildBooleanOG(BeanItem dtoBI, String attName,
@@ -873,7 +879,7 @@ public class UtilUI {
 			String labelTrue, String labelFalse, boolean horizontal, int value)
 			throws Exception {
 
-		OptionGroup og = ControlFactory.buildOG();
+		OptionGroup og = buildOG();
 
 		og.setCaption(label);
 
@@ -972,7 +978,7 @@ public class UtilUI {
 			throws SecurityException, ClassNotFoundException,
 			NoSuchFieldException {
 
-		DateField df = ControlFactory.buildDF(false);
+		DateField df = buildDF(false);
 
 		df.setCaption(label);
 
@@ -1065,3 +1071,6 @@ public class UtilUI {
 	}
 
 }
+
+
+

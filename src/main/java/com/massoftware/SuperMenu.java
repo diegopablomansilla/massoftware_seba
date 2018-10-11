@@ -13,6 +13,7 @@ import com.massoftware.windows.provincias.WProvincias;
 import com.massoftware.windows.subCtaCte.WSubCtaCte;
 import com.massoftware.windows.sucursales.WSucursales;
 import com.massoftware.windows.talonarios.WTalonarios;
+import com.massoftware.windows.tiposDeClientes.WTiposDeClientes;
 import com.massoftware.windows.tiposDocumentosAfip.WTiposDocumentosAfip;
 import com.massoftware.windows.zonas.WZonas;
 import com.vaadin.ui.MenuBar;
@@ -55,6 +56,7 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Depositos", openDepositosCmd());
 		a1.addItem("Talonarios", openTalonariosCmd());
 		a1.addItem("Ciudades", openCiudadesCmd());
+		a1.addItem("Tipos de clientes", openTiposDeClientesCmd());
 		
 		return menubar;
 	}
@@ -317,7 +319,22 @@ public class SuperMenu extends AbstractMenu {
 		};
 	}
 	
-	
+	protected Command openTiposDeClientesCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WTiposDeClientes();
+				getUI().addWindow(window);
+			}
+		};
+	}
 	
 	
 }
