@@ -5,6 +5,7 @@ import com.massoftware.windows.cargas.WCargas;
 import com.massoftware.windows.condicionesDeVentas.WCondicionesDeVentas;
 import com.massoftware.windows.cuidades.WCiudades;
 import com.massoftware.windows.depositos.WDepositos;
+import com.massoftware.windows.marcas.WMarcas;
 import com.massoftware.windows.motBloqueosClie.WMotBloqueosClie;
 import com.massoftware.windows.motivosComentarios.WMotivosComentarios;
 import com.massoftware.windows.motivosNotasDeCredito.WMotivosNotasDeCreditos;
@@ -57,6 +58,7 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Talonarios", openTalonariosCmd());
 		a1.addItem("Ciudades", openCiudadesCmd());
 		a1.addItem("Tipos de clientes", openTiposDeClientesCmd());
+		a1.addItem("Marcas", openMarcasCmd());
 		
 		return menubar;
 	}
@@ -335,6 +337,24 @@ public class SuperMenu extends AbstractMenu {
 			}
 		};
 	}
+	
+	protected Command openMarcasCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WMarcas();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
 	
 	
 }
