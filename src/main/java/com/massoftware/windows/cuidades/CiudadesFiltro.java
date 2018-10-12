@@ -46,7 +46,7 @@ public class CiudadesFiltro {
 
 	@Override
 	public String toString() {
-		return "CiudadesFiltro [pais=" + pais + ", numero=" + numero + ", nombre=" + nombre + "]";
+		return "CiudadesFiltro [pais=" + pais.getNumero() + ", provincia="+ provincia.getNumero() +", numero=" + numero + ", nombre=" + nombre + "]";
 	}
 
 }

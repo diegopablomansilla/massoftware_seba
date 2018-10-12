@@ -59,7 +59,10 @@ public class WCiudades extends Window {
 	private HorizontalLayout numeroTXTHL;
 	private HorizontalLayout nombreTXTHL;
 
-	
+	private HorizontalLayout provinciasCBXHL;
+	private HorizontalLayout filaFiltroHL;
+	private HorizontalLayout paisesCBXHL;
+	private Button buscarBTN; 
 	// -------------------------------------------------------------
 
 	@SuppressWarnings("serial")
@@ -78,12 +81,12 @@ public class WCiudades extends Window {
 			// -------------------------------------------------------
 			// FILTROS
 
-			HorizontalLayout filaFiltroHL = new HorizontalLayout();
+			filaFiltroHL = new HorizontalLayout();
 			filaFiltroHL.setSpacing(true);
 
 			// -----------
 
-			HorizontalLayout paisesCBXHL = UtilUI.buildCBHL(filterBI, "pais",
+			paisesCBXHL = UtilUI.buildCBHL(filterBI, "pais",
 					"País", false, true, Paises.class, queryDataPaises());
 
 			ComboBox paisesCBX = (ComboBox) paisesCBXHL.getComponent(0);
@@ -91,8 +94,15 @@ public class WCiudades extends Window {
 			
 			
 			paisesCBX.addValueChangeListener(e -> {
+
+//				this.loadDataResetPaged();
 				
-				this.loadDataResetPaged();
+//				Paises pais= (Paises) paisesCBX.getValue();
+//				pais.getNumero();
+//				
+//				paisesCBX.getItem((Paises)paisesCBX.getValue()).getItemProperty("numero").getValue();
+				
+				cargaCmbProv((int)paisesCBX.getItem((Paises)paisesCBX.getValue()).getItemProperty("numero").getValue());
 				
 			});
 
@@ -102,24 +112,27 @@ public class WCiudades extends Window {
 				this.loadDataResetPaged();
 			});
 			
-			
+
 			// -----------
 
-			HorizontalLayout provinciasCBXHL = UtilUI.buildCBHL(filterBI, "provincia",
-					"Provincia", false, true, Provincias.class, queryDataProvincias());
+			
+//			HorizontalLayout provinciasCBXHL = UtilUI.buildCBHL(filterBI, "provincia",
+//					"Provincia", false, true, Provincias.class, queryDataProvincias());
+//
+//			ComboBox provinciasCBX = (ComboBox) provinciasCBXHL.getComponent(0);
+//
+//			provinciasCBX.addValueChangeListener(e -> {
+//				this.loadDataResetPaged();
+//			});
+//
+//			Button provinciaBTN = (Button) provinciasCBXHL.getComponent(1);
+//
+//			provinciaBTN.addClickListener(e -> {
+//				this.loadDataResetPaged();
+//			});
 
-			ComboBox provinciasCBX = (ComboBox) provinciasCBXHL.getComponent(0);
-
-			provinciasCBX.addValueChangeListener(e -> {
-				this.loadDataResetPaged();
-			});
-
-			Button provinciaBTN = (Button) provinciasCBXHL.getComponent(1);
-
-			provinciaBTN.addClickListener(e -> {
-				this.loadDataResetPaged();
-			});
-
+			
+			
 			// -----------
 
 			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero",
@@ -174,14 +187,16 @@ public class WCiudades extends Window {
 
 			// -----------
 
-			Button buscarBTN = UtilUI.buildButtonBuscar();
+			buscarBTN = UtilUI.buildButtonBuscar();
 			buscarBTN.addClickListener(e -> {
 				loadData();
 			});
 
-			filaFiltroHL.addComponents(paisesCBXHL, provinciasCBXHL, numeroTXTHL, nombreTXTHL,buscarBTN);
+			cargaCmbProv(0);
+			
+//			filaFiltroHL.addComponents(paisesCBXHL, provinciasCBXHL, numeroTXTHL, nombreTXTHL,buscarBTN);
 
-			filaFiltroHL.setComponentAlignment(buscarBTN,Alignment.MIDDLE_RIGHT);
+//			filaFiltroHL.setComponentAlignment(buscarBTN,Alignment.MIDDLE_RIGHT);
 
 			// =======================================================
 			// -------------------------------------------------------
@@ -313,6 +328,7 @@ public class WCiudades extends Window {
 					agregarBTNClick();
 				}
 			});
+			
 			// --------------------------------------------------
 
 			this.addShortcutListener(new ShortcutListener("CTRL+M", KeyCode.M,
@@ -356,6 +372,37 @@ public class WCiudades extends Window {
 		}
 	}
 
+	
+
+	
+	
+	private void cargaCmbProv(int pais) {
+		try {
+			
+			provinciasCBXHL = UtilUI.buildCBHL(filterBI, "provincia",
+					"Provincia", false, true, Provincias.class, queryDataProvincias(pais));
+	
+			ComboBox provinciasCBX = (ComboBox) provinciasCBXHL.getComponent(0);
+	
+			provinciasCBX.addValueChangeListener(e -> {
+				this.loadDataResetPaged();
+			});
+	
+			Button provinciaBTN = (Button) provinciasCBXHL.getComponent(1);
+	
+			provinciaBTN.addClickListener(e -> {
+				this.loadDataResetPaged();
+			});
+			
+			filaFiltroHL.removeAllComponents();
+			filaFiltroHL.addComponents(paisesCBXHL, provinciasCBXHL, numeroTXTHL, nombreTXTHL,buscarBTN);
+			filaFiltroHL.setComponentAlignment(buscarBTN,Alignment.MIDDLE_RIGHT);
+			
+		} catch(Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+	
 	// =================================================================================
 
 	private void buildContainersItems() throws Exception {
@@ -527,10 +574,10 @@ public class WCiudades extends Window {
 		return new ArrayList<Paises>();
 	}
 
-	private List<Provincias> queryDataProvincias() {
+	private List<Provincias> queryDataProvincias(int idPais) {
 		try {
 
-			return mockDataProvincias();
+			return mockDataProvincias(idPais);
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -592,17 +639,20 @@ public class WCiudades extends Window {
 
 		if (itemsMock.size() == 0) {
 
-			for (int i = 0; i < 500; i++) {
-
-				Ciudades item = new Ciudades();
-
-				item.setNumeroPais(i);
-				item.setNumeroProvincia(i);
-				item.setNumero(i);
-				item.setNombre("Nombre " + i);
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < 10; j++) {
+					for (int k = 0; k < 10; k++) {
+						Ciudades item = new Ciudades();
+		
+						item.setNumeroPais(i);
+						item.setNumeroProvincia(j);
+						item.setNumero(k);
+						item.setNombre("Nombre " + k);
+		
+						itemsMock.add(item);
+					}
+				}
 				
-
-				itemsMock.add(item);
 			}
 		}
 
@@ -643,7 +693,7 @@ public class WCiudades extends Window {
 
 		if (itemsMock.size() == 0) {
 
-			for (int i = 0; i < 500; i++) {
+			for (int i = 0; i < 10; i++) {
 
 				Paises item = new Paises();
 
@@ -658,25 +708,26 @@ public class WCiudades extends Window {
 		return itemsMock;
 	}
 
-	private List<Provincias> mockDataProvincias() {
+	private List<Provincias> mockDataProvincias(int idPais) {
 
-		List<Provincias> itemsMock = new ArrayList<Provincias>();
+		List<Provincias> itemsMockProv = new ArrayList<Provincias>();
 
-		if (itemsMock.size() == 0) {
+		if (itemsMockProv.size() == 0) {
 
-			for (int i = 0; i < 500; i++) {
+			for (int i = 0; i < 10; i++) {
 
 				Provincias item = new Provincias();
 
+				item.setNumeroPais(idPais);
 				item.setNumero(i);
 				item.setNombre("Provincia " + i);
 				item.setAbreviatura("Abreviatura " + i);
 
-				itemsMock.add(item);
+				itemsMockProv.add(item);
 			}
 		}
 
-		return itemsMock;
+		return itemsMockProv;
 	}
 	// =================================================================================
 
