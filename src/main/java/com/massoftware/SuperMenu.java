@@ -2,6 +2,7 @@ package com.massoftware;
 
 import com.massoftware.windows.alicuotas.WAlicuotas;
 import com.massoftware.windows.cargas.WCargas;
+import com.massoftware.windows.codigosConvenioMultilateral.WCodigosConvenioMultilateral;
 import com.massoftware.windows.condicionesDeVentas.WCondicionesDeVentas;
 import com.massoftware.windows.cuidades.WCiudades;
 import com.massoftware.windows.depositos.WDepositos;
@@ -11,11 +12,14 @@ import com.massoftware.windows.motivosComentarios.WMotivosComentarios;
 import com.massoftware.windows.motivosNotasDeCredito.WMotivosNotasDeCreditos;
 import com.massoftware.windows.paises.WPaises;
 import com.massoftware.windows.provincias.WProvincias;
+import com.massoftware.windows.rubrosProveedores.WRubrosProveedores;
 import com.massoftware.windows.subCtaCte.WSubCtaCte;
+import com.massoftware.windows.subCtaCteProv.WSubCtaCteProv;
 import com.massoftware.windows.sucursales.WSucursales;
 import com.massoftware.windows.talonarios.WTalonarios;
 import com.massoftware.windows.tiposDeClientes.WTiposDeClientes;
 import com.massoftware.windows.tiposDocumentosAfip.WTiposDocumentosAfip;
+import com.massoftware.windows.unidadesDeMedida.WUnidadesDeMedida;
 import com.massoftware.windows.zonas.WZonas;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
@@ -59,10 +63,17 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Ciudades", openCiudadesCmd());
 		a1.addItem("Tipos de clientes", openTiposDeClientesCmd());
 		a1.addItem("Marcas", openMarcasCmd());
+		a1.addItem("Unidades de medida", openUnidadesDeMedidaCmd());
+		a1.addItem("Códigos convenio multilateral", openCodConvMultilateralCmd());
+		a1.addItem("Rubros proveedores", openRubrosProveedoresCmd());
+		a1.addItem("Sub cuenta corriente", openSubCtaCteProvCmd());
 		
 		return menubar;
 	}
 
+	
+	
+	
 	protected Command openPaisesCmd() {
 
 		return new Command() {
@@ -355,6 +366,73 @@ public class SuperMenu extends AbstractMenu {
 		};
 	}
 	
+	protected Command openUnidadesDeMedidaCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WUnidadesDeMedida();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openCodConvMultilateralCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WCodigosConvenioMultilateral();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openRubrosProveedoresCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WRubrosProveedores();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openSubCtaCteProvCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WSubCtaCteProv();
+				getUI().addWindow(window);
+			}
+		};
+	}
 	
 	
 }
