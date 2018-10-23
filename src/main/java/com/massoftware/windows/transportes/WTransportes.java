@@ -1,4 +1,4 @@
-package com.massoftware.windows.marcas;
+package com.massoftware.windows.transportes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,14 +28,14 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class WMarcas extends Window {
+public class WTransportes extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<MarcasFiltro> filterBI;
-	private BeanItemContainer<Marcas> itemsBIC;
+	private BeanItem<TransportesFiltro> filterBI;
+	private BeanItemContainer<Transportes> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -53,20 +53,20 @@ public class WMarcas extends Window {
 
 	// -------------------------------------------------------------
 
-	private HorizontalLayout numeroTXTHL;
-	private HorizontalLayout nombreTXTHL;
+	private HorizontalLayout codigoTXTHL;
+	private HorizontalLayout descripcionTXTHL;
 
 	// -------------------------------------------------------------
 
 	@SuppressWarnings("serial")
-	public WMarcas() {
+	public WTransportes() {
 		super();
 
 		try {
 
 			buildContainersItems();
 
-			UtilUI.confWinList(this, "Marcas");
+			UtilUI.confWinList(this, "Transportes");
 
 			VerticalLayout content = UtilUI.buildWinContentVertical();
 
@@ -79,16 +79,16 @@ public class WMarcas extends Window {
 
 			// -----------
 
-			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero",
-					"Numero", false, 5, -1, 3, false, false, null, false,
+			codigoTXTHL = UtilUI.buildTXTHLInteger(filterBI, "transporte",
+					"Transporte", false, 5, -1, 3, false, false, null, false,
 					UtilUI.EQUALS, 0, 255);
 
-			TextField numeroTXT = (TextField) numeroTXTHL.getComponent(0);
+			TextField codigoTXT = (TextField) codigoTXTHL.getComponent(0);
 
-			numeroTXT.addTextChangeListener(new TextChangeListener() {
+			codigoTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						numeroTXT.setValue(event.getText());
+						codigoTXT.setValue(event.getText());
 						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
@@ -97,24 +97,24 @@ public class WMarcas extends Window {
 
 			});
 
-			Button numeroBTN = (Button) numeroTXTHL.getComponent(1);
+			Button codigoBTN = (Button) codigoTXTHL.getComponent(1);
 
-			numeroBTN.addClickListener(e -> {
+			codigoBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
 			// -----------
 
-			nombreTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
-					false, 20, -1, 30, false, false, null, false,
+			descripcionTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
+					false, 20, -1, 35, false, false, null, false,
 					UtilUI.CONTAINS_WORDS_AND);
 
-			TextField nombreTXT = (TextField) nombreTXTHL.getComponent(0);
+			TextField descripcionTXT = (TextField) descripcionTXTHL.getComponent(0);
 
-			nombreTXT.addTextChangeListener(new TextChangeListener() {
+			descripcionTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						nombreTXT.setValue(event.getText());
+						descripcionTXT.setValue(event.getText());
 						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
@@ -123,9 +123,9 @@ public class WMarcas extends Window {
 
 			});
 
-			Button nombreBTN = (Button) nombreTXTHL.getComponent(1);
+			Button descripcionBTN = (Button) descripcionTXTHL.getComponent(1);
 
-			nombreBTN.addClickListener(e -> {
+			descripcionBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
@@ -136,23 +136,32 @@ public class WMarcas extends Window {
 				loadData();
 			});
 
-			filaFiltroHL.addComponents(numeroTXTHL, nombreTXTHL, buscarBTN);
+			filaFiltroHL.addComponents(codigoTXTHL, descripcionTXTHL,buscarBTN);
 
-			filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
+			filaFiltroHL.setComponentAlignment(buscarBTN,Alignment.MIDDLE_RIGHT);
 
 			// =======================================================
 			// -------------------------------------------------------
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			itemsGRD.setWidth("100%");
+			itemsGRD.setWidth("650px");
 
-			itemsGRD.setColumns(new Object[] { "numero", "nombre", "abreviatura" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Nro.", true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), "Abreviatura", true, 80);
+			itemsGRD.setColumns(new Object[] { "transporte", "nombre", "domicilio","codigoPostal","ciudad","telefono","fax" });
 
+			UtilUI.confColumn(itemsGRD.getColumn("transporte"), "Número", true,50);
+			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre.", true, 200);
+			UtilUI.confColumn(itemsGRD.getColumn("domicilio"), "Domicilio", true, 150);
+			UtilUI.confColumn(itemsGRD.getColumn("codigoPostal"), "C.Postal", true, 80);
+			UtilUI.confColumn(itemsGRD.getColumn("ciudad"), "Ciudad", true, 150);
+			UtilUI.confColumn(itemsGRD.getColumn("telefono"), "Tel.", true, true,false,true,100);
+			UtilUI.confColumn(itemsGRD.getColumn("fax"), "Fax", true, true,false,true, 100);
+
+			
+//			Column confColumn(Column column, String label,bool hidable, bool hidden, bool editable, bool sortable, double pixelWidth
+					
+					
 			itemsGRD.setContainerDataSource(itemsBIC);
 
 			// .......
@@ -176,7 +185,7 @@ public class WMarcas extends Window {
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			order.add(new SortOrder("numero", SortDirection.ASCENDING));
+			order.add(new SortOrder("transporte", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
 
@@ -228,15 +237,12 @@ public class WMarcas extends Window {
 
 			// -------------------------------------------------------
 
-			content.addComponents(filaFiltroHL, itemsGRD, filaBotoneraPagedHL,
-					filaBotoneraHL, filaBotonera2HL);
+			content.addComponents(filaFiltroHL,itemsGRD, filaBotoneraPagedHL, filaBotoneraHL, filaBotonera2HL);
 
-			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
-			content.setComponentAlignment(filaBotoneraPagedHL,
-					Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_LEFT);
+			content.setComponentAlignment(filaBotoneraPagedHL, Alignment.MIDDLE_RIGHT);
 			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
-			content.setComponentAlignment(filaBotonera2HL,
-					Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
 
 			this.setContent(content);
 
@@ -317,9 +323,8 @@ public class WMarcas extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<MarcasFiltro>(new MarcasFiltro());
-		itemsBIC = new BeanItemContainer<Marcas>(Marcas.class,
-				new ArrayList<Marcas>());
+		filterBI = new BeanItem<TransportesFiltro>(new TransportesFiltro());
+		itemsBIC = new BeanItemContainer<Transportes>(Transportes.class, new ArrayList<Transportes>());
 	}
 
 	// =================================================================================
@@ -370,7 +375,7 @@ public class WMarcas extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													Marcas item = (Marcas) itemsGRD
+													Transportes item = (Transportes) itemsGRD
 															.getSelectedRow();
 
 													deleteItem(item);
@@ -399,7 +404,7 @@ public class WMarcas extends Window {
 		try {
 
 			itemsGRD.select(null);
-			Window window = new Window("Agregar ítem ");
+			Window window = new Window("Agregar ítem");
 			window.setModal(true);
 			window.center();
 			window.setWidth("400px");
@@ -416,8 +421,8 @@ public class WMarcas extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				Marcas item = (Marcas) itemsGRD.getSelectedRow();
-				item.getNumero();
+				Transportes item = (Transportes) itemsGRD.getSelectedRow();
+				item.getTransporte();
 
 				Window window = new Window("Modificar ítem " + item);
 				window.setModal(true);
@@ -442,14 +447,14 @@ public class WMarcas extends Window {
 	private void loadData() {
 		try {
 
-			((Validatable) numeroTXTHL.getComponent(0)).validate();
-			((Validatable) nombreTXTHL.getComponent(0)).validate();
+			((Validatable) codigoTXTHL.getComponent(0)).validate();
+			((Validatable) descripcionTXTHL.getComponent(0)).validate();
 
-			List<Marcas> items = queryData();
+			List<Transportes> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (Marcas item : items) {
+			for (Transportes item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -459,9 +464,7 @@ public class WMarcas extends Window {
 			modificarBTN.setEnabled(enabled);
 			eliminarBTN.setEnabled(enabled);
 
-			nextPageBTN
-					.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
-
+			nextPageBTN.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
 
 			prevPageBTN.setEnabled(offset >= limit);
 
@@ -475,8 +478,9 @@ public class WMarcas extends Window {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
+
 	// metodo que realiza la consulta a la base de datos
-	private List<Marcas> queryData() {
+	private List<Transportes> queryData() {
 		try {
 
 			System.out.println("Los filtros son "
@@ -494,7 +498,7 @@ public class WMarcas extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<Marcas> items = mockData(limit, offset,
+			List<Transportes> items = mockData(limit, offset,
 					this.filterBI.getBean());
 
 			return items;
@@ -503,15 +507,15 @@ public class WMarcas extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Marcas>();
+		return new ArrayList<Transportes>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(Marcas item) {
+	private void deleteItem(Transportes item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
-				if (itemsMock.get(i).getNumero().equals(item.getNumero())) {
+				if (itemsMock.get(i).getTransporte().equals(item.getTransporte())) {
 					itemsMock.remove(i);
 					return;
 				}
@@ -525,30 +529,35 @@ public class WMarcas extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<Marcas> itemsMock = new ArrayList<Marcas>();
+	List<Transportes> itemsMock = new ArrayList<Transportes>();
 
-	private List<Marcas> mockData(int limit, int offset, MarcasFiltro filtro) {
+	private List<Transportes> mockData(int limit, int offset, TransportesFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
 
 			for (int i = 0; i < 500; i++) {
 
-				Marcas item = new Marcas();
+				Transportes item = new Transportes();
 
-				item.setNumero(i);
-				item.setNombre("Nombre " + i);
-				item.setAbreviatura("Abreviatura " + i);
+				item.setTransporte(i);
+				item.setNombre("Descripción "+ i);
+				item.setDomicilio("Domicilio "+i);
+				item.setCodigoPostal("CP "+i);
+				item.setCiudad("Ciudad "+i);
+				item.setTelefono("Tel. "+i);
+				item.setFax("Fax "+i);
 
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<Marcas> arrayList = new ArrayList<Marcas>();
+		ArrayList<Transportes> arrayList = new ArrayList<Transportes>();
 
-		for (Marcas item : itemsMock) {
+		for (Transportes item : itemsMock) {
 
-			boolean passesFilterNumero = (filtro.getNumero() == null || item
-					.getNumero().equals(filtro.getNumero()));
+
+			boolean passesFilterNumero = (filtro.getTransporte() == null || item
+					.getTransporte().equals(filtro.getTransporte()));
 
 			boolean passesFilterNombre = (filtro.getNombre() == null || item
 					.getNombre().toLowerCase()
@@ -566,6 +575,7 @@ public class WMarcas extends Window {
 
 		return arrayList.subList(offset, end);
 	}
+
 
 	// =================================================================================
 

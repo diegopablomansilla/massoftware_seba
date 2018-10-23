@@ -62,17 +62,37 @@ public class WCondicionesDeVentas extends Window {
 
 	// -------------------------------------------------------------
 
-	@SuppressWarnings("serial")
+	public final static String C_MODE = "Ventas";
+	public final static String CT_MODE = "Compras";
+	
+	
+	private String mode = C_MODE;
+	
+	// -------------------------------------------------------------
+
 	public WCondicionesDeVentas() {
 		super();
+		init();
+	}
+
+	
+	public WCondicionesDeVentas(String mode) {
+		super();
+		this.mode = mode;
+		init();
+	}
+	
+
+	@SuppressWarnings("serial")
+	public void init() {
 
 		try {
 
 			buildContainersItems();
 
-			UtilUI.confWinList(this, "Condiciones de ventas");
+			UtilUI.confWinList(this, "Condiciones de "+ mode);
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------
@@ -545,7 +565,7 @@ public class WCondicionesDeVentas extends Window {
 				item.setDiasProntoPago(i);
 				item.setEsContado(true);
 				item.setLlamaFondo(true);
-				item.setModulo("V");
+				item.setModulo(mode);
 				item.setActivo(true);
 				
 				

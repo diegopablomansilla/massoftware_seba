@@ -2,6 +2,7 @@ package com.massoftware;
 
 import com.massoftware.windows.alicuotas.WAlicuotas;
 import com.massoftware.windows.cargas.WCargas;
+import com.massoftware.windows.centrosDeCosto.WCentrosDeCosto;
 import com.massoftware.windows.codigosConvenioMultilateral.WCodigosConvenioMultilateral;
 import com.massoftware.windows.condicionesDeVentas.WCondicionesDeVentas;
 import com.massoftware.windows.cuidades.WCiudades;
@@ -19,6 +20,8 @@ import com.massoftware.windows.sucursales.WSucursales;
 import com.massoftware.windows.talonarios.WTalonarios;
 import com.massoftware.windows.tiposDeClientes.WTiposDeClientes;
 import com.massoftware.windows.tiposDocumentosAfip.WTiposDocumentosAfip;
+import com.massoftware.windows.tiposRetenciones.WTiposRetenciones;
+import com.massoftware.windows.transportes.WTransportes;
 import com.massoftware.windows.unidadesDeMedida.WUnidadesDeMedida;
 import com.massoftware.windows.zonas.WZonas;
 import com.vaadin.ui.MenuBar;
@@ -50,7 +53,7 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Provincias", openProvinciasCmd());
 		a1.addItem("Zonas", openZonasCmd());
 		a1.addItem("Sub ctas-ctes", openSubCtaCteCmd());
-		a1.addItem("Condiciones de ventas", openCondDeVentasCmd());
+		a1.addItem("Condiciones de ventas", openCondDeVentasCmd("Ventas"));
 		a1.addItem("Bloqueo de clientes", openBloqClientesCmd());
 		a1.addItem("Alícuotas", openAlicuotasCmd());
 		a1.addItem("Cargas", openCargasCmd());
@@ -67,11 +70,67 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Códigos convenio multilateral", openCodConvMultilateralCmd());
 		a1.addItem("Rubros proveedores", openRubrosProveedoresCmd());
 		a1.addItem("Sub cuenta corriente", openSubCtaCteProvCmd());
+		a1.addItem("Transportes", openTransporteCmd());
+		a1.addItem("Condiciones de compras", openCondDeVentasCmd("Compras"));
+		a1.addItem("Centros de costo - Proyectos", openCentroCostoProyectoCmd());
+		a1.addItem("Tipos retenciones", openTiposRetencionesCmd());
 		
 		return menubar;
 	}
 
 	
+	
+	protected Command openTiposRetencionesCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WTiposRetenciones();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openCentroCostoProyectoCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WCentrosDeCosto();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	
+	protected Command openTransporteCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WTransportes();
+				getUI().addWindow(window);
+			}
+		};
+	}
 	
 	
 	protected Command openPaisesCmd() {
@@ -143,7 +202,7 @@ public class SuperMenu extends AbstractMenu {
 	}
 	
 	
-	protected Command openCondDeVentasCmd() {
+	protected Command openCondDeVentasCmd(String cod) {
 
 		return new Command() {
 			/**
@@ -154,7 +213,7 @@ public class SuperMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WCondicionesDeVentas();
+				Window window = new WCondicionesDeVentas(cod);
 				getUI().addWindow(window);
 			}
 		};

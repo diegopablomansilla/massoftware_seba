@@ -69,7 +69,7 @@ public class WZonas extends Window {
 
 			UtilUI.confWinList(this, "Zonas");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

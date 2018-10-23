@@ -70,7 +70,7 @@ public class WDepositos extends Window {
 
 			UtilUI.confWinList(this, "Depositos");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

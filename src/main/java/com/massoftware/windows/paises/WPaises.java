@@ -68,7 +68,7 @@ public class WPaises extends Window {
 
 			UtilUI.confWinList(this, "Paises");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

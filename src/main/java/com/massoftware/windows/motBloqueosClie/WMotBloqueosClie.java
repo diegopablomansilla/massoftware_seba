@@ -68,7 +68,7 @@ public class WMotBloqueosClie extends Window {
 
 			UtilUI.confWinList(this, "Motivos de bloqueos a clientes");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

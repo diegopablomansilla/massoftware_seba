@@ -69,7 +69,7 @@ public class WTiposDeClientes extends Window {
 
 			UtilUI.confWinList(this, "Tipos de clientes");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

@@ -75,7 +75,7 @@ public class WCiudades extends Window {
 
 			UtilUI.confWinList(this, "Ciudades");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

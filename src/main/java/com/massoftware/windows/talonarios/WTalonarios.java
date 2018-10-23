@@ -70,7 +70,7 @@ public class WTalonarios extends Window {
 
 			UtilUI.confWinList(this, "Talonarios");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

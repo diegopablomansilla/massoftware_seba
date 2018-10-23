@@ -68,7 +68,7 @@ public class WMotivosNotasDeCreditos extends Window {
 
 			UtilUI.confWinList(this, "Motivos notas de créditos");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

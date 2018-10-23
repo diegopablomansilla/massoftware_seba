@@ -68,7 +68,7 @@ public class WSucursales extends Window {
 
 			UtilUI.confWinList(this, "Sucursales");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------
@@ -84,7 +84,7 @@ public class WSucursales extends Window {
 					UtilUI.EQUALS, 0, 255);
 
 			TextField codigoTXT = (TextField) codigoTXTHL.getComponent(0);
-
+			
 			codigoTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {

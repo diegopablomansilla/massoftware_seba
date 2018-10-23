@@ -68,7 +68,7 @@ public class WUnidadesDeMedida extends Window {
 
 			UtilUI.confWinList(this, "Unidades de medida");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

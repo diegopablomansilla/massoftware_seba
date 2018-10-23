@@ -68,7 +68,7 @@ public class WRubrosProveedores extends Window {
 
 			UtilUI.confWinList(this, "Rubros proveedores");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

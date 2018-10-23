@@ -68,7 +68,7 @@ public class WMotivosComentarios extends Window {
 
 			UtilUI.confWinList(this, "Motivos comentarios");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

@@ -69,7 +69,7 @@ public class WAlicuotas extends Window {
 
 			UtilUI.confWinList(this, "Alícuotas");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

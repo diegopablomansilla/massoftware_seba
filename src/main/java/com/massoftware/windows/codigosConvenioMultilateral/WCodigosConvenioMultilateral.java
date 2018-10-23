@@ -68,7 +68,7 @@ public class WCodigosConvenioMultilateral extends Window {
 
 			UtilUI.confWinList(this, "Códigos convenio multilateral");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

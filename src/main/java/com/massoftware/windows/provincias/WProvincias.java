@@ -70,7 +70,7 @@ public class WProvincias extends Window {
 
 			UtilUI.confWinList(this, "Provincias");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

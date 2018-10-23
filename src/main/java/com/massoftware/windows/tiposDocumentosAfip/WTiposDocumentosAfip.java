@@ -68,7 +68,7 @@ public class WTiposDocumentosAfip extends Window {
 
 			UtilUI.confWinList(this, "Tipos documentos AFIP");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

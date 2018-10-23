@@ -69,7 +69,7 @@ public class WSubCtaCte extends Window {
 
 			UtilUI.confWinList(this, "Sub cuentas corrientes");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

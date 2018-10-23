@@ -68,7 +68,7 @@ public class WCargas extends Window {
 
 			UtilUI.confWinList(this, "Cargas");
 
-			VerticalLayout content = UtilUI.buildWinContentList();
+			VerticalLayout content = UtilUI.buildWinContentVertical();
 
 			// =======================================================
 			// -------------------------------------------------------

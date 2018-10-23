@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.vaadin.inputmask.InputMask;
 
-
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.Converter;
@@ -82,9 +81,19 @@ public class UtilUI {
 		return column;
 	}
 
-	public static VerticalLayout buildWinContentList() {
+	public static VerticalLayout buildWinContentVertical() {
 
 		VerticalLayout content = new VerticalLayout();
+		content.setMargin(true);
+		content.setSpacing(true);
+		content.setWidth("100%");
+
+		return content;
+	}
+
+	public static HorizontalLayout buildWinContentHorizontal() {
+
+		HorizontalLayout content = new HorizontalLayout();
 		content.setMargin(true);
 		content.setSpacing(true);
 		content.setWidth("100%");
@@ -634,7 +643,8 @@ public class UtilUI {
 	@SuppressWarnings("rawtypes")
 	public static HorizontalLayout buildSearchBox(BeanItem dtoBI,
 			String attNameCode, String attName, String label, String label2,
-			boolean required) throws SecurityException, ClassNotFoundException, NoSuchFieldException {
+			boolean required) throws SecurityException, ClassNotFoundException,
+			NoSuchFieldException {
 
 		return buildSearchBox(dtoBI, attNameCode, attName, label, label2,
 				required, label, false);
@@ -644,8 +654,9 @@ public class UtilUI {
 	@SuppressWarnings({ "rawtypes" })
 	public static HorizontalLayout buildSearchBox(BeanItem dtoBI,
 			String attNameCode, String attName, String label, String label2,
-			boolean required, String label3, boolean onlyBtn) throws SecurityException,
-			ClassNotFoundException, NoSuchFieldException {
+			boolean required, String label3, boolean onlyBtn)
+			throws SecurityException, ClassNotFoundException,
+			NoSuchFieldException {
 
 		// HorizontalLayout hl = buildHL();
 		HorizontalLayout hl = new HorizontalLayout();
@@ -653,11 +664,11 @@ public class UtilUI {
 		hl.setMargin(false);
 		hl.setSpacing(false);
 		// hl.setCaption(label);
-		
+
 		Button btn = new Button();
 		btn.addStyleName("borderless tiny");
 		btn.setIcon(FontAwesome.FOLDER_OPEN);
-		btn.setDescription("Buscar " + label3);			
+		btn.setDescription("Buscar " + label3);
 
 		// TextField txtSearch = ControlFactory.buildTXT();
 		TextField txtSearch = new TextField();
@@ -703,13 +714,13 @@ public class UtilUI {
 		txtValue.setInputPrompt(label3);
 		txtValue.setDescription(label3);
 
-		if(onlyBtn){
+		if (onlyBtn) {
 			hl.addComponent(btn);
 			hl.setComponentAlignment(btn, Alignment.BOTTOM_LEFT);
-			txtSearch.setEnabled(false);
+			txtSearch.setVisible(false);
+			txtValue.setCaption(label);
 		}
-		
-		
+
 		hl.addComponent(txtSearch);
 		hl.setComponentAlignment(txtSearch, Alignment.MIDDLE_LEFT);
 
@@ -865,7 +876,7 @@ public class UtilUI {
 
 		return cb;
 	}
-	
+
 	public static OptionGroup buildOG() {
 		OptionGroup og = new OptionGroup();
 		og.addStyleName(ValoTheme.OPTIONGROUP_SMALL);
@@ -894,6 +905,40 @@ public class UtilUI {
 		og.setItemCaption(0, labelAll);
 		og.setItemCaption(1, labelTrue);
 		og.setItemCaption(2, labelFalse);
+
+		if (horizontal) {
+			og.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
+		}
+
+		og.setPropertyDataSource(dtoBI.getItemProperty(attName));
+
+		og.setValue(value);
+
+		og.setReadOnly(readOnly);
+
+		return og;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static OptionGroup buildBooleanOG(BeanItem dtoBI, String attName,
+			String label, boolean readOnly, boolean required, String[] labels,
+			Integer[] values, boolean horizontal, int value) throws Exception {
+
+		OptionGroup og = buildOG();
+
+		og.setCaption(label);
+
+		og.setRequiredError("El campo '" + label
+				+ "' es requerido. Es decir no debe estar vacio.");
+		og.setRequired(required);
+
+		for (Integer item : values) {
+			og.addItem(item);
+		}
+
+		for (int i = 0; i < values.length; i++) {
+			og.setItemCaption(values[i], labels[i]);
+		}
 
 		if (horizontal) {
 			og.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
@@ -1071,6 +1116,3 @@ public class UtilUI {
 	}
 
 }
-
-
-
