@@ -1,6 +1,9 @@
-package com.massoftware.windows.provincias;
+package com.massoftware.windows.conveniosElaboracion;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,36 +12,38 @@ import java.util.Random;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.paises.Paises;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.event.SortEvent;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.renderers.DateRenderer;
+import com.vaadin.ui.renderers.HtmlRenderer;
 
-public class WProvincias extends Window {
+public class WConveniosDeElaboracion extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<ProvinciasFiltro> filterBI;
-	private BeanItemContainer<Provincias> itemsBIC;
+	private BeanItem<ConveniosDeElaboracionFiltro> filterBI;
+	private BeanItemContainer<ConveniosDeElaboracion> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -56,20 +61,20 @@ public class WProvincias extends Window {
 
 	// -------------------------------------------------------------
 
-	private HorizontalLayout numeroTXTHL;
-	private HorizontalLayout nombreTXTHL;
+	private HorizontalLayout codigoTXTHL;
+	private HorizontalLayout descripcionTXTHL;
 
 	// -------------------------------------------------------------
 
 	@SuppressWarnings("serial")
-	public WProvincias() {
+	public WConveniosDeElaboracion() {
 		super();
 
 		try {
 
 			buildContainersItems();
 
-			UtilUI.confWinList(this, "Provincias");
+			UtilUI.confWinList(this, "Convenios de elaboración");
 
 			VerticalLayout content = UtilUI.buildWinContentVertical();
 
@@ -82,33 +87,16 @@ public class WProvincias extends Window {
 
 			// -----------
 
-			HorizontalLayout paisesCBXHL = UtilUI.buildCBHL(filterBI, "pais",
-					"País", false, true, Paises.class, queryDataPaises());
-
-			ComboBox paisesCBX = (ComboBox) paisesCBXHL.getComponent(0);
-
-			paisesCBX.addValueChangeListener(e -> {
-				this.loadDataResetPaged();
-			});
-
-			Button paisBTN = (Button) paisesCBXHL.getComponent(1);
-
-			paisBTN.addClickListener(e -> {
-				this.loadDataResetPaged();
-			});
-
-			// -----------
-
-			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero",
-					"Numero", false, 5, -1, 3, false, false, null, false,
+			codigoTXTHL = UtilUI.buildTXTHLInteger(filterBI, "convenio",
+					"Convenio", false, 5, -1, 3, false, false, null, false,
 					UtilUI.EQUALS, 0, 255);
 
-			TextField numeroTXT = (TextField) numeroTXTHL.getComponent(0);
+			TextField codigoTXT = (TextField) codigoTXTHL.getComponent(0);
 
-			numeroTXT.addTextChangeListener(new TextChangeListener() {
+			codigoTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						numeroTXT.setValue(event.getText());
+						codigoTXT.setValue(event.getText());
 						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
@@ -117,24 +105,24 @@ public class WProvincias extends Window {
 
 			});
 
-			Button numeroBTN = (Button) numeroTXTHL.getComponent(1);
+			Button codigoBTN = (Button) codigoTXTHL.getComponent(1);
 
-			numeroBTN.addClickListener(e -> {
+			codigoBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
 			// -----------
 
-			nombreTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
+			descripcionTXTHL = UtilUI.buildTXTHL(filterBI, "cuenta", "Cliente",
 					false, 20, -1, 25, false, false, null, false,
 					UtilUI.CONTAINS_WORDS_AND);
 
-			TextField nombreTXT = (TextField) nombreTXTHL.getComponent(0);
+			TextField descripcionTXT = (TextField) descripcionTXTHL.getComponent(0);
 
-			nombreTXT.addTextChangeListener(new TextChangeListener() {
+			descripcionTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						nombreTXT.setValue(event.getText());
+						descripcionTXT.setValue(event.getText());
 						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
@@ -143,9 +131,9 @@ public class WProvincias extends Window {
 
 			});
 
-			Button nombreBTN = (Button) nombreTXTHL.getComponent(1);
+			Button descripcionBTN = (Button) descripcionTXTHL.getComponent(1);
 
-			nombreBTN.addClickListener(e -> {
+			descripcionBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
@@ -156,43 +144,38 @@ public class WProvincias extends Window {
 				loadData();
 			});
 
-			filaFiltroHL.addComponents(paisesCBXHL, numeroTXTHL, nombreTXTHL,
-					buscarBTN);
+			filaFiltroHL.addComponents(codigoTXTHL, descripcionTXTHL,buscarBTN);
 
-			filaFiltroHL.setComponentAlignment(buscarBTN,
-					Alignment.MIDDLE_RIGHT);
+			filaFiltroHL.setComponentAlignment(buscarBTN,Alignment.MIDDLE_RIGHT);
 
 			// =======================================================
 			// -------------------------------------------------------
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			itemsGRD.setWidth("390px");
-			itemsGRD.setWidth("100%");
+			itemsGRD.setWidth("540px");
 
-			itemsGRD.setColumns(new Object[] { "numeroPais", "numero",
-					"nombre", "abreviatura" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("numeroPais"), "País", true,
-					50);
-			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Prov.", true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), "Abreviatura",
-					true, -1);
+			itemsGRD.setColumns(new Object[] { "convenio","tipoConvenio","detalle","cuenta","modalidadFason","fechaConciliacionSQL","activo" });
+
+			UtilUI.confColumn(itemsGRD.getColumn("convenio"), "Cód", true,50);
+			UtilUI.confColumn(itemsGRD.getColumn("tipoConvenio"), "Producto Convenio.", true, 80);
+			UtilUI.confColumn(itemsGRD.getColumn("detalle"), "Detalle Convenio", true, 100);
+			UtilUI.confColumn(itemsGRD.getColumn("cuenta"), "Cliente",true, 80);
+			UtilUI.confColumn(itemsGRD.getColumn("modalidadFason"), "Fabricante",true, 80);
+			UtilUI.confColumn(itemsGRD.getColumn("fechaConciliacionSQL"), "Conciliación",true, 80);
+			UtilUI.confColumn(itemsGRD.getColumn("activo"), "Activo",true, 50);
 
 			itemsGRD.setContainerDataSource(itemsBIC);
 
 			// .......
 
 			// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-			// itemsGRD.getColumn("attName").setRenderer(
-			// new HtmlRenderer(),
-			// new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O
-			// .getHtml(), FontAwesome.SQUARE_O.getHtml()));
+			 itemsGRD.getColumn("activo").setRenderer(new HtmlRenderer(),
+			 new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
 
 			// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
-			// itemsGRD.getColumn("attName").setRenderer(
-			// new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
+			 itemsGRD.getColumn("fechaConciliacionSQL").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
 
 			// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
 			// itemsGRD.getColumn("attName").setRenderer(
@@ -203,8 +186,7 @@ public class WProvincias extends Window {
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			order.add(new SortOrder("numeroPais", SortDirection.ASCENDING));
-			order.add(new SortOrder("numero", SortDirection.ASCENDING));
+			order.add(new SortOrder("convenio", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
 
@@ -256,15 +238,11 @@ public class WProvincias extends Window {
 
 			// -------------------------------------------------------
 
-			content.addComponents(filaFiltroHL, itemsGRD, filaBotoneraPagedHL,
-					filaBotoneraHL, filaBotonera2HL);
+			content.addComponents(filaFiltroHL,itemsGRD, filaBotoneraPagedHL, filaBotoneraHL, filaBotonera2HL);
 
-			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
-			content.setComponentAlignment(filaBotoneraPagedHL,
-					Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotoneraPagedHL, Alignment.MIDDLE_RIGHT);
 			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
-			content.setComponentAlignment(filaBotonera2HL,
-					Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
 
 			this.setContent(content);
 
@@ -345,9 +323,8 @@ public class WProvincias extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<ProvinciasFiltro>(new ProvinciasFiltro());
-		itemsBIC = new BeanItemContainer<Provincias>(Provincias.class,
-				new ArrayList<Provincias>());
+		filterBI = new BeanItem<ConveniosDeElaboracionFiltro>(new ConveniosDeElaboracionFiltro());
+		itemsBIC = new BeanItemContainer<ConveniosDeElaboracion>(ConveniosDeElaboracion.class, new ArrayList<ConveniosDeElaboracion>());
 	}
 
 	// =================================================================================
@@ -398,7 +375,7 @@ public class WProvincias extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													Provincias item = (Provincias) itemsGRD
+													ConveniosDeElaboracion item = (ConveniosDeElaboracion) itemsGRD
 															.getSelectedRow();
 
 													deleteItem(item);
@@ -444,8 +421,8 @@ public class WProvincias extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				Provincias item = (Provincias) itemsGRD.getSelectedRow();
-				item.getNumero();
+				ConveniosDeElaboracion item = (ConveniosDeElaboracion) itemsGRD.getSelectedRow();
+				item.getConvenio();
 
 				Window window = new Window("Modificar ítem " + item);
 				window.setModal(true);
@@ -470,14 +447,14 @@ public class WProvincias extends Window {
 	private void loadData() {
 		try {
 
-			((Validatable) numeroTXTHL.getComponent(0)).validate();
-			((Validatable) nombreTXTHL.getComponent(0)).validate();
+			((Validatable) codigoTXTHL.getComponent(0)).validate();
+			((Validatable) descripcionTXTHL.getComponent(0)).validate();
 
-			List<Provincias> items = queryData();
+			List<ConveniosDeElaboracion> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (Provincias item : items) {
+			for (ConveniosDeElaboracion item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -487,8 +464,7 @@ public class WProvincias extends Window {
 			modificarBTN.setEnabled(enabled);
 			eliminarBTN.setEnabled(enabled);
 
-			nextPageBTN
-					.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
+			nextPageBTN.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
 
 			prevPageBTN.setEnabled(offset >= limit);
 
@@ -502,24 +478,12 @@ public class WProvincias extends Window {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
-	private List<Paises> queryDataPaises() {
-		try {
-
-			return mockDataPaises();
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new ArrayList<Paises>();
-	}
 
 	// metodo que realiza la consulta a la base de datos
-	private List<Provincias> queryData() {
+	private List<ConveniosDeElaboracion> queryData() {
 		try {
 
-			System.out.println("Los filtros son "
-					+ this.filterBI.getBean().toString());
+			System.out.println("Los filtros son "+ this.filterBI.getBean().toString());
 
 			// Notification.show("Los filtros son "
 			// + this.filterBI.getBean().toString());
@@ -533,7 +497,7 @@ public class WProvincias extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<Provincias> items = mockData(limit, offset,
+			List<ConveniosDeElaboracion> items = mockData(limit, offset,
 					this.filterBI.getBean());
 
 			return items;
@@ -542,15 +506,15 @@ public class WProvincias extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Provincias>();
+		return new ArrayList<ConveniosDeElaboracion>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(Provincias item) {
+	private void deleteItem(ConveniosDeElaboracion item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
-				if (itemsMock.get(i).getNumero().equals(item.getNumero())) {
+				if (itemsMock.get(i).getConvenio().equals(item.getConvenio())) {
 					itemsMock.remove(i);
 					return;
 				}
@@ -564,42 +528,47 @@ public class WProvincias extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<Provincias> itemsMock = new ArrayList<Provincias>();
+	List<ConveniosDeElaboracion> itemsMock = new ArrayList<ConveniosDeElaboracion>();
 
-	private List<Provincias> mockData(int limit, int offset,
-			ProvinciasFiltro filtro) {
+	private List<ConveniosDeElaboracion> mockData(int limit, int offset, ConveniosDeElaboracionFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
-
+			BigDecimal v = new BigDecimal("0.00");
+			BigDecimal v1 = new BigDecimal ("1.01");
 			for (int i = 0; i < 500; i++) {
 
-				Provincias item = new Provincias();
-
-				item.setNumeroPais(new Random().nextInt(10)+1 );
-				item.setNumero(i);
-				item.setNombre("Provincia " + i);
-				item.setAbreviatura("Abreviatura " + i);
+				ConveniosDeElaboracion item = new ConveniosDeElaboracion();
+				v=v.add(v1);
+				item.setConvenio(i);
+				item.setTipoConvenio(new Random().nextInt(6)+1);
+				item.setDetalle("Detalle Conv "+i);
+				item.setCuenta("Cuenta "+new Random().nextInt(6)+1);
+				item.setModalidadFason(new Random().nextInt(2)+1);
+				item.setFechaConciliacionSQL(new Date());
+				item.setActivo(new Random().nextInt() % 2 == 0 );
+				
+				
+				
+				
+				
 
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<Provincias> arrayList = new ArrayList<Provincias>();
+		ArrayList<ConveniosDeElaboracion> arrayList = new ArrayList<ConveniosDeElaboracion>();
 
-		for (Provincias item : itemsMock) {
+		for (ConveniosDeElaboracion item : itemsMock) {
 
-			boolean passesFilterNumeroPais = (filtro.getPais() == null || item
-					.getNumeroPais().equals(filtro.getPais().getNumero()));
 
-			boolean passesFilterNumero = (filtro.getNumero() == null || item
-					.getNumero().equals(filtro.getNumero()));
+			boolean passesFilterNumero = (filtro.getConvenio() == null || item
+					.getConvenio().equals(filtro.getConvenio()));
 
-			boolean passesFilterNombre = (filtro.getNombre() == null || item
-					.getNombre().toLowerCase()
-					.contains(filtro.getNombre().toLowerCase()));
+			boolean passesFilterNombre = (filtro.getCuenta() == null || item
+					.getCuenta().toLowerCase()
+					.contains(filtro.getCuenta().toLowerCase()));
 
-			if (passesFilterNumeroPais && passesFilterNumero
-					&& passesFilterNombre) {
+			if (passesFilterNumero && passesFilterNombre) {
 				arrayList.add(item);
 			}
 		}
@@ -612,26 +581,6 @@ public class WProvincias extends Window {
 		return arrayList.subList(offset, end);
 	}
 
-	private List<Paises> mockDataPaises() {
-
-		List<Paises> itemsMock = new ArrayList<Paises>();
-
-		if (itemsMock.size() == 0) {
-
-			for (int i = 1; i < 20; i++) {
-
-				Paises item = new Paises();
-
-				item.setNumero(i);
-				item.setNombre("País" + i);
-				item.setAbreviatura("Abreviatura " + i);
-
-				itemsMock.add(item);
-			}
-		}
-
-		return itemsMock;
-	}
 
 	// =================================================================================
 

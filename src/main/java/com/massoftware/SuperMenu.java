@@ -3,8 +3,10 @@ package com.massoftware;
 import com.massoftware.windows.alicuotas.WAlicuotas;
 import com.massoftware.windows.cargas.WCargas;
 import com.massoftware.windows.centrosDeCosto.WCentrosDeCosto;
+import com.massoftware.windows.claseComprobante.WClaseComprobante;
 import com.massoftware.windows.codigosConvenioMultilateral.WCodigosConvenioMultilateral;
 import com.massoftware.windows.condicionesDeVentas.WCondicionesDeVentas;
+import com.massoftware.windows.conveniosElaboracion.WConveniosDeElaboracion;
 import com.massoftware.windows.cuidades.WCiudades;
 import com.massoftware.windows.depositos.WDepositos;
 import com.massoftware.windows.marcas.WMarcas;
@@ -12,6 +14,7 @@ import com.massoftware.windows.motBloqueosClie.WMotBloqueosClie;
 import com.massoftware.windows.motivosComentarios.WMotivosComentarios;
 import com.massoftware.windows.motivosNotasDeCredito.WMotivosNotasDeCreditos;
 import com.massoftware.windows.paises.WPaises;
+import com.massoftware.windows.perfilesDeFacturacion.WPerfilesDeFacturacion;
 import com.massoftware.windows.provincias.WProvincias;
 import com.massoftware.windows.rubrosProveedores.WRubrosProveedores;
 import com.massoftware.windows.subCtaCte.WSubCtaCte;
@@ -74,11 +77,64 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Condiciones de compras", openCondDeVentasCmd("Compras"));
 		a1.addItem("Centros de costo - Proyectos", openCentroCostoProyectoCmd());
 		a1.addItem("Tipos retenciones", openTiposRetencionesCmd());
+		a1.addItem("Clase comprobantes", openClaseComprobantesCmd());
+		a1.addItem("Perfiles de facturación", openPerfilesDeFacturacionCmd());
+		a1.addItem("Convenios de elaboración", openConvenioDeElaboracionCmd());
 		
 		return menubar;
 	}
 
 	
+	protected Command openConvenioDeElaboracionCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WConveniosDeElaboracion();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openPerfilesDeFacturacionCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WPerfilesDeFacturacion();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openClaseComprobantesCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WClaseComprobante();
+				getUI().addWindow(window);
+			}
+		};
+	}
 	
 	protected Command openTiposRetencionesCmd() {
 

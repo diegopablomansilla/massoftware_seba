@@ -1,4 +1,4 @@
-package com.massoftware.windows.provincias;
+package com.massoftware.windows.perfilesDeFacturacion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.Random;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.paises.Paises;
+import com.massoftware.windows.claseComprobante.ClaseComprobante;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
@@ -31,14 +31,14 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class WProvincias extends Window {
+public class WPerfilesDeFacturacion extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<ProvinciasFiltro> filterBI;
-	private BeanItemContainer<Provincias> itemsBIC;
+	private BeanItem<PerfilesDeFacturacionFiltro> filterBI;
+	private BeanItemContainer<PerfilesDeFacturacion> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -62,14 +62,14 @@ public class WProvincias extends Window {
 	// -------------------------------------------------------------
 
 	@SuppressWarnings("serial")
-	public WProvincias() {
+	public WPerfilesDeFacturacion() {
 		super();
 
 		try {
 
 			buildContainersItems();
 
-			UtilUI.confWinList(this, "Provincias");
+			UtilUI.confWinList(this, "Perfiles de facturación");
 
 			VerticalLayout content = UtilUI.buildWinContentVertical();
 
@@ -82,8 +82,8 @@ public class WProvincias extends Window {
 
 			// -----------
 
-			HorizontalLayout paisesCBXHL = UtilUI.buildCBHL(filterBI, "pais",
-					"País", false, true, Paises.class, queryDataPaises());
+			HorizontalLayout paisesCBXHL = UtilUI.buildCBHL(filterBI, "claseComprobante",
+					"Clase de Cbte", false, true, ClaseComprobante.class, queryDataClaseCbte());
 
 			ComboBox paisesCBX = (ComboBox) paisesCBXHL.getComponent(0);
 
@@ -156,11 +156,9 @@ public class WProvincias extends Window {
 				loadData();
 			});
 
-			filaFiltroHL.addComponents(paisesCBXHL, numeroTXTHL, nombreTXTHL,
-					buscarBTN);
+			filaFiltroHL.addComponents(paisesCBXHL, numeroTXTHL, buscarBTN);
 
-			filaFiltroHL.setComponentAlignment(buscarBTN,
-					Alignment.MIDDLE_RIGHT);
+			filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
 			// =======================================================
 			// -------------------------------------------------------
@@ -170,15 +168,11 @@ public class WProvincias extends Window {
 			itemsGRD.setWidth("390px");
 			itemsGRD.setWidth("100%");
 
-			itemsGRD.setColumns(new Object[] { "numeroPais", "numero",
-					"nombre", "abreviatura" });
+			itemsGRD.setColumns(new Object[] {  "numero", "nombre", "claseCbte"});
 
-			UtilUI.confColumn(itemsGRD.getColumn("numeroPais"), "País", true,
-					50);
-			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Prov.", true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("claseCbte"), "Clase de Cbte", true,50);
+			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Nro.", true, 50);
 			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), "Abreviatura",
-					true, -1);
 
 			itemsGRD.setContainerDataSource(itemsBIC);
 
@@ -203,7 +197,7 @@ public class WProvincias extends Window {
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			order.add(new SortOrder("numeroPais", SortDirection.ASCENDING));
+			order.add(new SortOrder("claseCbte", SortDirection.ASCENDING));
 			order.add(new SortOrder("numero", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
@@ -256,15 +250,12 @@ public class WProvincias extends Window {
 
 			// -------------------------------------------------------
 
-			content.addComponents(filaFiltroHL, itemsGRD, filaBotoneraPagedHL,
-					filaBotoneraHL, filaBotonera2HL);
+			content.addComponents(filaFiltroHL, itemsGRD, filaBotoneraPagedHL, filaBotoneraHL, filaBotonera2HL);
 
 			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
-			content.setComponentAlignment(filaBotoneraPagedHL,
-					Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotoneraPagedHL, Alignment.MIDDLE_RIGHT);
 			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
-			content.setComponentAlignment(filaBotonera2HL,
-					Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
 
 			this.setContent(content);
 
@@ -298,6 +289,7 @@ public class WProvincias extends Window {
 					agregarBTNClick();
 				}
 			});
+			
 			// --------------------------------------------------
 
 			this.addShortcutListener(new ShortcutListener("CTRL+M", KeyCode.M,
@@ -345,9 +337,9 @@ public class WProvincias extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<ProvinciasFiltro>(new ProvinciasFiltro());
-		itemsBIC = new BeanItemContainer<Provincias>(Provincias.class,
-				new ArrayList<Provincias>());
+		filterBI = new BeanItem<PerfilesDeFacturacionFiltro>(new PerfilesDeFacturacionFiltro());
+		itemsBIC = new BeanItemContainer<PerfilesDeFacturacion>(PerfilesDeFacturacion.class,
+				new ArrayList<PerfilesDeFacturacion>());
 	}
 
 	// =================================================================================
@@ -398,7 +390,7 @@ public class WProvincias extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													Provincias item = (Provincias) itemsGRD
+													PerfilesDeFacturacion item = (PerfilesDeFacturacion) itemsGRD
 															.getSelectedRow();
 
 													deleteItem(item);
@@ -444,7 +436,7 @@ public class WProvincias extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				Provincias item = (Provincias) itemsGRD.getSelectedRow();
+				PerfilesDeFacturacion item = (PerfilesDeFacturacion) itemsGRD.getSelectedRow();
 				item.getNumero();
 
 				Window window = new Window("Modificar ítem " + item);
@@ -473,11 +465,11 @@ public class WProvincias extends Window {
 			((Validatable) numeroTXTHL.getComponent(0)).validate();
 			((Validatable) nombreTXTHL.getComponent(0)).validate();
 
-			List<Provincias> items = queryData();
+			List<PerfilesDeFacturacion> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (Provincias item : items) {
+			for (PerfilesDeFacturacion item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -487,8 +479,7 @@ public class WProvincias extends Window {
 			modificarBTN.setEnabled(enabled);
 			eliminarBTN.setEnabled(enabled);
 
-			nextPageBTN
-					.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
+			nextPageBTN.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
 
 			prevPageBTN.setEnabled(offset >= limit);
 
@@ -502,24 +493,23 @@ public class WProvincias extends Window {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
-	private List<Paises> queryDataPaises() {
+	private List<ClaseComprobante> queryDataClaseCbte() {
 		try {
 
-			return mockDataPaises();
+			return mockDataClaseComprobante();
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Paises>();
+		return new ArrayList<ClaseComprobante>();
 	}
 
 	// metodo que realiza la consulta a la base de datos
-	private List<Provincias> queryData() {
+	private List<PerfilesDeFacturacion> queryData() {
 		try {
 
-			System.out.println("Los filtros son "
-					+ this.filterBI.getBean().toString());
+			System.out.println("Los filtros son "+ this.filterBI.getBean().toString());
 
 			// Notification.show("Los filtros son "
 			// + this.filterBI.getBean().toString());
@@ -533,7 +523,7 @@ public class WProvincias extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<Provincias> items = mockData(limit, offset,
+			List<PerfilesDeFacturacion> items = mockData(limit, offset,
 					this.filterBI.getBean());
 
 			return items;
@@ -542,11 +532,11 @@ public class WProvincias extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Provincias>();
+		return new ArrayList<PerfilesDeFacturacion>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(Provincias item) {
+	private void deleteItem(PerfilesDeFacturacion item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
@@ -564,42 +554,38 @@ public class WProvincias extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<Provincias> itemsMock = new ArrayList<Provincias>();
+	List<PerfilesDeFacturacion> itemsMock = new ArrayList<PerfilesDeFacturacion>();
 
-	private List<Provincias> mockData(int limit, int offset,
-			ProvinciasFiltro filtro) {
+	private List<PerfilesDeFacturacion> mockData(int limit, int offset,
+			PerfilesDeFacturacionFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
 
 			for (int i = 0; i < 500; i++) {
 
-				Provincias item = new Provincias();
+				PerfilesDeFacturacion item = new PerfilesDeFacturacion();
 
-				item.setNumeroPais(new Random().nextInt(10)+1 );
+				item.setClaseCbte(new Random().nextInt(3)+1 );
 				item.setNumero(i);
-				item.setNombre("Provincia " + i);
-				item.setAbreviatura("Abreviatura " + i);
+				item.setNombre("Nombre " + i);
 
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<Provincias> arrayList = new ArrayList<Provincias>();
+		ArrayList<PerfilesDeFacturacion> arrayList = new ArrayList<PerfilesDeFacturacion>();
 
-		for (Provincias item : itemsMock) {
+		for (PerfilesDeFacturacion item : itemsMock) {
 
-			boolean passesFilterNumeroPais = (filtro.getPais() == null || item
-					.getNumeroPais().equals(filtro.getPais().getNumero()));
+			boolean passesFilterNumeroPais = (filtro.getClaseComprobante()== null || item
+					.getClaseCbte().equals(filtro.getClaseComprobante().getNumero()));
 
 			boolean passesFilterNumero = (filtro.getNumero() == null || item
 					.getNumero().equals(filtro.getNumero()));
 
-			boolean passesFilterNombre = (filtro.getNombre() == null || item
-					.getNombre().toLowerCase()
-					.contains(filtro.getNombre().toLowerCase()));
 
-			if (passesFilterNumeroPais && passesFilterNumero
-					&& passesFilterNombre) {
+
+			if (passesFilterNumeroPais && passesFilterNumero) {
 				arrayList.add(item);
 			}
 		}
@@ -612,19 +598,19 @@ public class WProvincias extends Window {
 		return arrayList.subList(offset, end);
 	}
 
-	private List<Paises> mockDataPaises() {
+	
+	private List<ClaseComprobante> mockDataClaseComprobante() {
 
-		List<Paises> itemsMock = new ArrayList<Paises>();
+		List<ClaseComprobante> itemsMock = new ArrayList<ClaseComprobante>();
 
 		if (itemsMock.size() == 0) {
 
-			for (int i = 1; i < 20; i++) {
+			for (int i = 1; i <= 3; i++) {
 
-				Paises item = new Paises();
+				ClaseComprobante item = new ClaseComprobante();
 
 				item.setNumero(i);
-				item.setNombre("País" + i);
-				item.setAbreviatura("Abreviatura " + i);
+				item.setNombre("Clase Cbte " + i);
 
 				itemsMock.add(item);
 			}
