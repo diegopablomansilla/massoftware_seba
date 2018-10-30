@@ -1,4 +1,4 @@
-package com.massoftware.windows.tiposRetenciones;
+package com.massoftware.windows.conceptosRetenciones;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,14 +9,12 @@ import java.util.Random;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.Validatable;
+import com.massoftware.windows.tiposRetenciones.TiposRetenciones;
+import com.massoftware.windows.tiposRetenciones.WTiposRetenciones;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.FieldEvents.TextChangeEvent;
-import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
@@ -26,21 +24,19 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.OptionGroup;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 
 
-public class WTiposRetenciones extends Window {
+public class WConceptosRetenciones extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<TiposRetencionesFiltro> filterBI;
-	private BeanItemContainer<TiposRetenciones> itemsBIC;
+	private BeanItem<ConceptosRetencionesFiltro> filterBI;
+	private BeanItemContainer<ConceptosRetenciones> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -49,7 +45,7 @@ public class WTiposRetenciones extends Window {
 
 	// -------------------------------------------------------------
 
-	public Grid itemsGRD;
+	private Grid itemsGRD;
 	private Button prevPageBTN;
 	private Button nextPageBTN;
 	private Button agregarBTN;
@@ -58,29 +54,14 @@ public class WTiposRetenciones extends Window {
 
 	// -------------------------------------------------------------
 
-	private HorizontalLayout codigoTXTHL;
-	private HorizontalLayout descripcionTXTHL;
-	private OptionGroup numeroEstadoOG;
+	
+	private HorizontalLayout tipoRetencionCBXHL;
 
 	// -------------------------------------------------------------
 
 
-	public WTiposRetenciones() {
+	public WConceptosRetenciones() {
 		super();
-		init(null);
-
-	}
-
-	
-	public WTiposRetenciones(Integer numero) {
-		super();
-		init(numero);
-	}
-	
-	
-	
-	@SuppressWarnings({ "serial"})
-	public void init(Integer numero) {
 
 		try {
 
@@ -99,78 +80,27 @@ public class WTiposRetenciones extends Window {
 
 			// -----------
 
-			codigoTXTHL = UtilUI.buildTXTHLInteger(filterBI, "tipoRetencion",
-					"Código", false, 5, -1, 3, false, false, null, false,
-					UtilUI.EQUALS, 0, 255);
+			tipoRetencionCBXHL = UtilUI.buildSearchBox(filterBI, "tipoRetencion",
+					"nombreRetencion", "Tipo Retención", "tipoRetencion", false, "Tipo de Retención", true);
 
-			TextField codigoTXT = (TextField) codigoTXTHL.getComponent(0);
-			
-			codigoTXT.addTextChangeListener(new TextChangeListener() {
-				public void textChange(TextChangeEvent event) {
-					try {
-						codigoTXT.setValue(event.getText());
-						loadDataResetPaged();
-					} catch (Exception e) {
-						LogAndNotification.print(e);
-					}
+			Button numeroBancoBTNOpen = (Button) tipoRetencionCBXHL.getComponent(0);
+
+			numeroBancoBTNOpen.addClickListener(e -> {
+				try {
+					selectTiposRetencionesTXTShortcutEnter();
+				} catch (Exception ex) {
+					LogAndNotification.print(ex);
 				}
-
 			});
 
-			Button codigoBTN = (Button) codigoTXTHL.getComponent(1);
+			Button numeroBancoBTN = (Button) tipoRetencionCBXHL.getComponent(3);
 
-			codigoBTN.addClickListener(e -> {
+			numeroBancoBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
-
-			// -----------
-
-			descripcionTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Descripción",
-					false, 20, -1, 35, false, false, null, false,
-					UtilUI.CONTAINS_WORDS_AND);
-
-			TextField descripcionTXT = (TextField) descripcionTXTHL.getComponent(0);
-
-			descripcionTXT.addTextChangeListener(new TextChangeListener() {
-				public void textChange(TextChangeEvent event) {
-					try {
-						descripcionTXT.setValue(event.getText());
-						loadDataResetPaged();
-					} catch (Exception e) {
-						LogAndNotification.print(e);
-					}
-				}
-
-			});
-
-			Button descripcionBTN = (Button) descripcionTXTHL.getComponent(1);
-
-			descripcionBTN.addClickListener(e -> {
-				this.loadDataResetPaged();
-			});
-
-			// -----------
-
-			
-			numeroEstadoOG = UtilUI.buildBooleanOG(filterBI, "gananciaIvaIngBruto",null, false, false, new String[] { 
-							"Ganancias", "I.V.A.", "Ing. Bruto", "Todos" }, new Integer[] {0, 1, 2, 3 }, true, 0);
-			
-			numeroEstadoOG.addValueChangeListener(new ValueChangeListener() {
-
-				@Override
-				public void valueChange(
-						com.vaadin.data.Property.ValueChangeEvent event) {
-					try {
-						loadDataResetPaged();
-					} catch (Exception e) {
-						LogAndNotification.print(e);
-					}
-				}
-			});
-
 			
 			
-			// -----------
+			// -----------		
 			
 			
 			
@@ -184,7 +114,7 @@ public class WTiposRetenciones extends Window {
 			
 			
 			
-			filaFiltroHL.addComponents(numeroEstadoOG,buscarBTN);
+			filaFiltroHL.addComponents(tipoRetencionCBXHL,buscarBTN);
 
 			filaFiltroHL.setComponentAlignment(buscarBTN,Alignment.MIDDLE_RIGHT);
 
@@ -193,14 +123,13 @@ public class WTiposRetenciones extends Window {
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			itemsGRD.setWidth("490px");
+			itemsGRD.setWidth("340px");
 
 
-			itemsGRD.setColumns(new Object[] { "tipoRetencion", "nombre", "formato" });
+			itemsGRD.setColumns(new Object[] { "retencion","descripcion"});
 
-			UtilUI.confColumn(itemsGRD.getColumn("tipoRetencion"), "Número", true,70);
-			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Descripción", true, 250);
-			UtilUI.confColumn(itemsGRD.getColumn("formato"), "Formato", true, 150);
+			UtilUI.confColumn(itemsGRD.getColumn("retencion"), "Código", true,70);
+			UtilUI.confColumn(itemsGRD.getColumn("descripcion"), "Descripción", true, 250);
 
 			
 			itemsGRD.setContainerDataSource(itemsBIC);
@@ -262,7 +191,7 @@ public class WTiposRetenciones extends Window {
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			order.add(new SortOrder("tipoRetencion", SortDirection.ASCENDING));
+			order.add(new SortOrder("retencion", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
 
@@ -394,23 +323,14 @@ public class WTiposRetenciones extends Window {
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
-		
-		
-		
-		
-		
 	}
-	
-	
-	
-	
-	
+
 	// =================================================================================
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<TiposRetencionesFiltro>(new TiposRetencionesFiltro());
-		itemsBIC = new BeanItemContainer<TiposRetenciones>(TiposRetenciones.class, new ArrayList<TiposRetenciones>());
+		filterBI = new BeanItem<ConceptosRetencionesFiltro>(new ConceptosRetencionesFiltro());
+		itemsBIC = new BeanItemContainer<ConceptosRetenciones>(ConceptosRetenciones.class, new ArrayList<ConceptosRetenciones>());
 	}
 
 	// =================================================================================
@@ -461,7 +381,7 @@ public class WTiposRetenciones extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													TiposRetenciones item = (TiposRetenciones) itemsGRD
+													ConceptosRetenciones item = (ConceptosRetenciones) itemsGRD
 															.getSelectedRow();
 
 													deleteItem(item);
@@ -507,8 +427,8 @@ public class WTiposRetenciones extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				TiposRetenciones item = (TiposRetenciones) itemsGRD.getSelectedRow();
-				item.getTipoRetencion();
+				ConceptosRetenciones item = (ConceptosRetenciones) itemsGRD.getSelectedRow();
+				item.getRetencion();
 
 				Window window = new Window("Modificar ítem " + item);
 				window.setModal(true);
@@ -523,6 +443,79 @@ public class WTiposRetenciones extends Window {
 		}
 	}
 
+	
+	
+	
+	protected void selectTiposRetencionesTXTShortcutEnter() {
+		try {
+
+			// if (this.filterBI.getBean().getNumeroBanco() != null) {
+
+			WTiposRetenciones window = new WTiposRetenciones(this.filterBI.getBean().getTipoRetencion());
+			window.setModal(true);
+			window.center();
+
+			window.addCloseListener(new CloseListener() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void windowClose(CloseEvent event) {
+					setNumeroTipoRetencionOnFilter(window);
+				}
+			});
+
+			// -------------------------------------------------------
+			// BOTONERA SELECCION
+
+			HorizontalLayout filaBotoneraHL = new HorizontalLayout();
+			filaBotoneraHL.setSpacing(true);
+
+			Button seleccionarBTN = UtilUI.buildButtonSeleccionar();
+			seleccionarBTN.addClickListener(e -> {
+				setNumeroTipoRetencionOnFilter(window);
+			});
+
+			filaBotoneraHL.addComponents(seleccionarBTN);
+
+			((VerticalLayout) window.getContent()).addComponent(filaBotoneraHL);
+
+			((VerticalLayout) window.getContent()).setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_CENTER);
+
+			getUI().addWindow(window);
+
+			// } else {
+			// this.filterBI.getItemProperty("nombreBanco").setValue(null);
+			// }
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	private void setNumeroTipoRetencionOnFilter(WTiposRetenciones window) {
+		try {
+			if (window.itemsGRD.getSelectedRow() != null) {
+
+				TiposRetenciones item = (TiposRetenciones) window.itemsGRD.getSelectedRow();
+
+				this.filterBI.getItemProperty("tipoRetencion").setValue(item.getTipoRetencion());
+				this.filterBI.getItemProperty("nombreRetencion").setValue(item.getNombre());
+				window.close();
+
+				loadDataResetPaged();
+			} else {
+				this.filterBI.getItemProperty("tipoRetencion").setValue(null);
+				this.filterBI.getItemProperty("nombreRetencion").setValue(null);
+			}
+		} catch (Exception ex) {
+			LogAndNotification.print(ex);
+		}
+	}
+	
 	// =================================================================================
 
 	private void loadDataResetPaged() {
@@ -533,14 +526,11 @@ public class WTiposRetenciones extends Window {
 	private void loadData() {
 		try {
 
-			((Validatable) codigoTXTHL.getComponent(0)).validate();
-			((Validatable) descripcionTXTHL.getComponent(0)).validate();
-
-			List<TiposRetenciones> items = queryData();
+			List<ConceptosRetenciones> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (TiposRetenciones item : items) {
+			for (ConceptosRetenciones item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -566,7 +556,7 @@ public class WTiposRetenciones extends Window {
 
 
 	// metodo que realiza la consulta a la base de datos
-	private List<TiposRetenciones> queryData() {
+	private List<ConceptosRetenciones> queryData() {
 		try {
 
 			System.out.println("Los filtros son "
@@ -584,7 +574,7 @@ public class WTiposRetenciones extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<TiposRetenciones> items = mockData(limit, offset,
+			List<ConceptosRetenciones> items = mockData(limit, offset,
 					this.filterBI.getBean());
 
 			return items;
@@ -593,15 +583,15 @@ public class WTiposRetenciones extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<TiposRetenciones>();
+		return new ArrayList<ConceptosRetenciones>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(TiposRetenciones item) {
+	private void deleteItem(ConceptosRetenciones item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
-				if (itemsMock.get(i).getTipoRetencion().equals(item.getTipoRetencion())) {
+				if (itemsMock.get(i).getRetencion().equals(item.getRetencion())) {
 					itemsMock.remove(i);
 					return;
 				}
@@ -615,45 +605,32 @@ public class WTiposRetenciones extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<TiposRetenciones> itemsMock = new ArrayList<TiposRetenciones>();
+	List<ConceptosRetenciones> itemsMock = new ArrayList<ConceptosRetenciones>();
 
-	private List<TiposRetenciones> mockData(int limit, int offset, TiposRetencionesFiltro filtro) {
+	private List<ConceptosRetenciones> mockData(int limit, int offset, ConceptosRetencionesFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
 
 			for (int i = 0; i < 500; i++) {
 
-				TiposRetenciones item = new TiposRetenciones();
+				ConceptosRetenciones item = new ConceptosRetenciones();
 
-				item.setTipoRetencion(i);
-				item.setNombre("Descripción "+ i);
-				item.setFormato("Formato "+ i);
-				item.setGananciaIvaIngBruto(new Random().nextInt(3));
+				item.setRetencion(i);
+				item.setDescripcion("Descripción "+ i);
+				item.setTipoRetencion(new Random().nextInt(3));
 				
-
-				
-
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<TiposRetenciones> arrayList = new ArrayList<TiposRetenciones>();
+		ArrayList<ConceptosRetenciones> arrayList = new ArrayList<ConceptosRetenciones>();
 
-		for (TiposRetenciones item : itemsMock) {
+		for (ConceptosRetenciones item : itemsMock) {
 
-
-//			boolean passesFilterNumero = (filtro.getNumero() == null || item
-//					.getNumero().equals(filtro.getNumero()));
-//
-//			boolean passesFilterNombre = (filtro.getNombre() == null || item
-//					.getNombre().toLowerCase()
-//					.contains(filtro.getNombre().toLowerCase()));
+			boolean passesFilterTipoRetencion = (filtro.getTipoRetencion() == null || item
+					.getTipoRetencion().equals(filtro.getTipoRetencion()));
 			
-			boolean passesFilterNumeroEstado = (filtro.getGananciaIvaIngBruto() == null
-					|| filtro.getGananciaIvaIngBruto() == 3 || item.getGananciaIvaIngBruto()
-					.equals(filtro.getGananciaIvaIngBruto()));
-			
-			if ( passesFilterNumeroEstado ) {
+			if ( passesFilterTipoRetencion) {
 				arrayList.add(item);
 			}
 		}

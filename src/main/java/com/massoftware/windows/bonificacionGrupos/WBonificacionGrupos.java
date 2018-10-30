@@ -1,15 +1,13 @@
-package com.massoftware.windows.tiposRetenciones;
+package com.massoftware.windows.bonificacionGrupos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
@@ -26,21 +24,18 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-
-
-public class WTiposRetenciones extends Window {
+public class WBonificacionGrupos extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<TiposRetencionesFiltro> filterBI;
-	private BeanItemContainer<TiposRetenciones> itemsBIC;
+	private BeanItem<BonificacionGruposFiltro> filterBI;
+	private BeanItemContainer<BonificacionGrupos> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -49,7 +44,7 @@ public class WTiposRetenciones extends Window {
 
 	// -------------------------------------------------------------
 
-	public Grid itemsGRD;
+	private Grid itemsGRD;
 	private Button prevPageBTN;
 	private Button nextPageBTN;
 	private Button agregarBTN;
@@ -60,33 +55,18 @@ public class WTiposRetenciones extends Window {
 
 	private HorizontalLayout codigoTXTHL;
 	private HorizontalLayout descripcionTXTHL;
-	private OptionGroup numeroEstadoOG;
 
 	// -------------------------------------------------------------
 
-
-	public WTiposRetenciones() {
+	@SuppressWarnings("serial")
+	public WBonificacionGrupos() {
 		super();
-		init(null);
-
-	}
-
-	
-	public WTiposRetenciones(Integer numero) {
-		super();
-		init(numero);
-	}
-	
-	
-	
-	@SuppressWarnings({ "serial"})
-	public void init(Integer numero) {
 
 		try {
 
 			buildContainersItems();
 
-			UtilUI.confWinList(this, "Tipos retenciones");
+			UtilUI.confWinList(this, "Bonificación grupos");
 
 			VerticalLayout content = UtilUI.buildWinContentVertical();
 
@@ -99,12 +79,12 @@ public class WTiposRetenciones extends Window {
 
 			// -----------
 
-			codigoTXTHL = UtilUI.buildTXTHLInteger(filterBI, "tipoRetencion",
-					"Código", false, 5, -1, 3, false, false, null, false,
+			codigoTXTHL = UtilUI.buildTXTHLInteger(filterBI, "grupoBonif",
+					"Número", false, 5, -1, 3, false, false, null, false,
 					UtilUI.EQUALS, 0, 255);
 
 			TextField codigoTXT = (TextField) codigoTXTHL.getComponent(0);
-			
+
 			codigoTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
@@ -125,8 +105,8 @@ public class WTiposRetenciones extends Window {
 
 			// -----------
 
-			descripcionTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Descripción",
-					false, 20, -1, 35, false, false, null, false,
+			descripcionTXTHL = UtilUI.buildTXTHL(filterBI, "descripcion", "Descripción",
+					false, 20, -1, 25, false, false, null, false,
 					UtilUI.CONTAINS_WORDS_AND);
 
 			TextField descripcionTXT = (TextField) descripcionTXTHL.getComponent(0);
@@ -151,40 +131,12 @@ public class WTiposRetenciones extends Window {
 
 			// -----------
 
-			
-			numeroEstadoOG = UtilUI.buildBooleanOG(filterBI, "gananciaIvaIngBruto",null, false, false, new String[] { 
-							"Ganancias", "I.V.A.", "Ing. Bruto", "Todos" }, new Integer[] {0, 1, 2, 3 }, true, 0);
-			
-			numeroEstadoOG.addValueChangeListener(new ValueChangeListener() {
-
-				@Override
-				public void valueChange(
-						com.vaadin.data.Property.ValueChangeEvent event) {
-					try {
-						loadDataResetPaged();
-					} catch (Exception e) {
-						LogAndNotification.print(e);
-					}
-				}
-			});
-
-			
-			
-			// -----------
-			
-			
-			
 			Button buscarBTN = UtilUI.buildButtonBuscar();
 			buscarBTN.addClickListener(e -> {
 				loadData();
 			});
 
-			
-			
-			
-			
-			
-			filaFiltroHL.addComponents(numeroEstadoOG,buscarBTN);
+			filaFiltroHL.addComponents(codigoTXTHL, descripcionTXTHL,buscarBTN);
 
 			filaFiltroHL.setComponentAlignment(buscarBTN,Alignment.MIDDLE_RIGHT);
 
@@ -193,23 +145,23 @@ public class WTiposRetenciones extends Window {
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			itemsGRD.setWidth("490px");
+			itemsGRD.setWidth("270px");
 
 
-			itemsGRD.setColumns(new Object[] { "tipoRetencion", "nombre", "formato" });
+			itemsGRD.setColumns(new Object[] { "grupoBonif", "descripcion" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("tipoRetencion"), "Número", true,70);
-			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Descripción", true, 250);
-			UtilUI.confColumn(itemsGRD.getColumn("formato"), "Formato", true, 150);
+			UtilUI.confColumn(itemsGRD.getColumn("grupoBonif"), "Número", true,50);
+			UtilUI.confColumn(itemsGRD.getColumn("descripcion"), "Descripción.", true, 200);
 
-			
 			itemsGRD.setContainerDataSource(itemsBIC);
 
 			// .......
 
 			// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-//			 itemsGRD.getColumn("proyectoActivo").setRenderer(new HtmlRenderer(),
-//			 new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
+			// itemsGRD.getColumn("attName").setRenderer(
+			// new HtmlRenderer(),
+			// new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O
+			// .getHtml(), FontAwesome.SQUARE_O.getHtml()));
 
 			// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 			// itemsGRD.getColumn("attName").setRenderer(
@@ -220,49 +172,11 @@ public class WTiposRetenciones extends Window {
 			// new DateRenderer(
 			// new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
 
-//			itemsGRD.getColumn("nombreTipo").setRenderer(new HtmlRenderer(),
-//					new Converter<String, String>() {
-//						@Override
-//						public String convertToModel(String value,
-//								Class<? extends String> targetType,
-//								Locale locale)
-//								throws Converter.ConversionException {
-//							return "not implemented";
-//						}
-//
-//						@Override
-//						public String convertToPresentation(String value,
-//								Class<? extends String> targetType,Locale locale)
-//								throws Converter.ConversionException {
-//
-//							if (value != null && value.trim().equalsIgnoreCase("Centro de Costo")) {
-//								return "<font color='blue'>" + value + "</font>";
-//								
-//							} else if (value != null && value.trim().equalsIgnoreCase("Proyecto")) {
-//								return "<font color='red'>" + value + "</font>";
-//								
-//							} else {
-//								return value;
-//							}
-//
-//						}
-//
-//						@Override
-//						public Class<String> getModelType() {
-//							return String.class;
-//						}
-//
-//						@Override
-//						public Class<String> getPresentationType() {
-//							return String.class;
-//						}
-//					});
-			
 			// .......
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			order.add(new SortOrder("tipoRetencion", SortDirection.ASCENDING));
+			order.add(new SortOrder("grupoBonif", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
 
@@ -314,9 +228,8 @@ public class WTiposRetenciones extends Window {
 
 			// -------------------------------------------------------
 
-			content.addComponents(filaFiltroHL,itemsGRD, filaBotoneraPagedHL, filaBotoneraHL, filaBotonera2HL);
+			content.addComponents(itemsGRD, filaBotoneraPagedHL, filaBotoneraHL, filaBotonera2HL);
 
-			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_LEFT);
 			content.setComponentAlignment(filaBotoneraPagedHL, Alignment.MIDDLE_RIGHT);
 			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
 			content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
@@ -394,23 +307,14 @@ public class WTiposRetenciones extends Window {
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
-		
-		
-		
-		
-		
 	}
-	
-	
-	
-	
-	
+
 	// =================================================================================
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<TiposRetencionesFiltro>(new TiposRetencionesFiltro());
-		itemsBIC = new BeanItemContainer<TiposRetenciones>(TiposRetenciones.class, new ArrayList<TiposRetenciones>());
+		filterBI = new BeanItem<BonificacionGruposFiltro>(new BonificacionGruposFiltro());
+		itemsBIC = new BeanItemContainer<BonificacionGrupos>(BonificacionGrupos.class, new ArrayList<BonificacionGrupos>());
 	}
 
 	// =================================================================================
@@ -461,7 +365,7 @@ public class WTiposRetenciones extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													TiposRetenciones item = (TiposRetenciones) itemsGRD
+													BonificacionGrupos item = (BonificacionGrupos) itemsGRD
 															.getSelectedRow();
 
 													deleteItem(item);
@@ -507,8 +411,8 @@ public class WTiposRetenciones extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				TiposRetenciones item = (TiposRetenciones) itemsGRD.getSelectedRow();
-				item.getTipoRetencion();
+				BonificacionGrupos item = (BonificacionGrupos) itemsGRD.getSelectedRow();
+				item.getGrupoBonif();
 
 				Window window = new Window("Modificar ítem " + item);
 				window.setModal(true);
@@ -536,11 +440,11 @@ public class WTiposRetenciones extends Window {
 			((Validatable) codigoTXTHL.getComponent(0)).validate();
 			((Validatable) descripcionTXTHL.getComponent(0)).validate();
 
-			List<TiposRetenciones> items = queryData();
+			List<BonificacionGrupos> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (TiposRetenciones item : items) {
+			for (BonificacionGrupos item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -566,7 +470,7 @@ public class WTiposRetenciones extends Window {
 
 
 	// metodo que realiza la consulta a la base de datos
-	private List<TiposRetenciones> queryData() {
+	private List<BonificacionGrupos> queryData() {
 		try {
 
 			System.out.println("Los filtros son "
@@ -584,7 +488,7 @@ public class WTiposRetenciones extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<TiposRetenciones> items = mockData(limit, offset,
+			List<BonificacionGrupos> items = mockData(limit, offset,
 					this.filterBI.getBean());
 
 			return items;
@@ -593,15 +497,15 @@ public class WTiposRetenciones extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<TiposRetenciones>();
+		return new ArrayList<BonificacionGrupos>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(TiposRetenciones item) {
+	private void deleteItem(BonificacionGrupos item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
-				if (itemsMock.get(i).getTipoRetencion().equals(item.getTipoRetencion())) {
+				if (itemsMock.get(i).getGrupoBonif().equals(item.getGrupoBonif())) {
 					itemsMock.remove(i);
 					return;
 				}
@@ -615,45 +519,37 @@ public class WTiposRetenciones extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<TiposRetenciones> itemsMock = new ArrayList<TiposRetenciones>();
+	List<BonificacionGrupos> itemsMock = new ArrayList<BonificacionGrupos>();
 
-	private List<TiposRetenciones> mockData(int limit, int offset, TiposRetencionesFiltro filtro) {
+	private List<BonificacionGrupos> mockData(int limit, int offset, BonificacionGruposFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
 
 			for (int i = 0; i < 500; i++) {
 
-				TiposRetenciones item = new TiposRetenciones();
+				BonificacionGrupos item = new BonificacionGrupos();
 
-				item.setTipoRetencion(i);
-				item.setNombre("Descripción "+ i);
-				item.setFormato("Formato "+ i);
-				item.setGananciaIvaIngBruto(new Random().nextInt(3));
-				
+				item.setGrupoBonif(i);
+				item.setDescripcion("Descripción "+ i);
 
-				
 
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<TiposRetenciones> arrayList = new ArrayList<TiposRetenciones>();
+		ArrayList<BonificacionGrupos> arrayList = new ArrayList<BonificacionGrupos>();
 
-		for (TiposRetenciones item : itemsMock) {
+		for (BonificacionGrupos item : itemsMock) {
 
 
-//			boolean passesFilterNumero = (filtro.getNumero() == null || item
-//					.getNumero().equals(filtro.getNumero()));
-//
-//			boolean passesFilterNombre = (filtro.getNombre() == null || item
-//					.getNombre().toLowerCase()
-//					.contains(filtro.getNombre().toLowerCase()));
-			
-			boolean passesFilterNumeroEstado = (filtro.getGananciaIvaIngBruto() == null
-					|| filtro.getGananciaIvaIngBruto() == 3 || item.getGananciaIvaIngBruto()
-					.equals(filtro.getGananciaIvaIngBruto()));
-			
-			if ( passesFilterNumeroEstado ) {
+			boolean passesFilterNumero = (filtro.getGrupoBonif() == null || item
+					.getGrupoBonif().equals(filtro.getGrupoBonif()));
+
+			boolean passesFilterNombre = (filtro.getDescripcion() == null || item
+					.getDescripcion().toLowerCase()
+					.contains(filtro.getDescripcion().toLowerCase()));
+
+			if (passesFilterNumero && passesFilterNombre) {
 				arrayList.add(item);
 			}
 		}

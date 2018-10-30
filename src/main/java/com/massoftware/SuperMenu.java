@@ -1,10 +1,13 @@
 package com.massoftware;
 
 import com.massoftware.windows.alicuotas.WAlicuotas;
+import com.massoftware.windows.bonificacionGrupos.WBonificacionGrupos;
+import com.massoftware.windows.bonificacionProductos.WBonificacionProductos;
 import com.massoftware.windows.cargas.WCargas;
 import com.massoftware.windows.centrosDeCosto.WCentrosDeCosto;
 import com.massoftware.windows.claseComprobante.WClaseComprobante;
 import com.massoftware.windows.codigosConvenioMultilateral.WCodigosConvenioMultilateral;
+import com.massoftware.windows.conceptosRetenciones.WConceptosRetenciones;
 import com.massoftware.windows.condicionesDeVentas.WCondicionesDeVentas;
 import com.massoftware.windows.conveniosElaboracion.WConveniosDeElaboracion;
 import com.massoftware.windows.cuidades.WCiudades;
@@ -80,10 +83,66 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Clase comprobantes", openClaseComprobantesCmd());
 		a1.addItem("Perfiles de facturación", openPerfilesDeFacturacionCmd());
 		a1.addItem("Convenios de elaboración", openConvenioDeElaboracionCmd());
+		a1.addItem("Conceptos retención", openConceptosRetencionCmd());
+		a1.addItem("Bonificación Grupos", openBonifGruposCmd());
+		a1.addItem("Bonificación Productos", openBonifProductoCmd());
 		
 		return menubar;
 	}
 
+	
+	
+	protected Command openBonifProductoCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WBonificacionProductos();
+				getUI().addWindow(window);
+			}
+		};
+	}	
+		
+	protected Command openBonifGruposCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WBonificacionGrupos();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openConceptosRetencionCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WConceptosRetenciones();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
 	
 	protected Command openConvenioDeElaboracionCmd() {
 
