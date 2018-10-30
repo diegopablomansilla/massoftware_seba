@@ -503,7 +503,7 @@ public class WConceptosRetenciones extends Window {
 				TiposRetenciones item = (TiposRetenciones) window.itemsGRD.getSelectedRow();
 
 				this.filterBI.getItemProperty("tipoRetencion").setValue(item.getTipoRetencion());
-				this.filterBI.getItemProperty("nombreRetencion").setValue(item.getNombre());
+				this.filterBI.getItemProperty("nombreRetencion").setValue(item.toString());
 				window.close();
 
 				loadDataResetPaged();
