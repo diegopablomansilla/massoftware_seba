@@ -12,6 +12,7 @@ import com.massoftware.windows.condicionesDeVentas.WCondicionesDeVentas;
 import com.massoftware.windows.conveniosElaboracion.WConveniosDeElaboracion;
 import com.massoftware.windows.cuidades.WCiudades;
 import com.massoftware.windows.depositos.WDepositos;
+import com.massoftware.windows.fecha_cierre_x_modulo.WFechaCierreXModulo;
 import com.massoftware.windows.marcas.WMarcas;
 import com.massoftware.windows.motBloqueosClie.WMotBloqueosClie;
 import com.massoftware.windows.motivosComentarios.WMotivosComentarios;
@@ -29,6 +30,7 @@ import com.massoftware.windows.tiposDocumentosAfip.WTiposDocumentosAfip;
 import com.massoftware.windows.tiposRetenciones.WTiposRetenciones;
 import com.massoftware.windows.transportes.WTransportes;
 import com.massoftware.windows.unidadesDeMedida.WUnidadesDeMedida;
+import com.massoftware.windows.zona.WZona;
 import com.massoftware.windows.zonas.WZonas;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
@@ -86,11 +88,30 @@ public class SuperMenu extends AbstractMenu {
 		a1.addItem("Conceptos retención", openConceptosRetencionCmd());
 		a1.addItem("Bonificación Grupos", openBonifGruposCmd());
 		a1.addItem("Bonificación Productos", openBonifProductoCmd());
-		
+		a1.addItem("FechaCierreXModulo", openFechaCierreXModuloCmd());
+
 		return menubar;
 	}
 
 	
+
+	
+	protected Command openFechaCierreXModuloCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WFechaCierreXModulo();
+				getUI().addWindow(window);
+			}
+		};
+	}	
 	
 	protected Command openBonifProductoCmd() {
 

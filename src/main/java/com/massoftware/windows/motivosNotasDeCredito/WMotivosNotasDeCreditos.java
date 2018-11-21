@@ -8,6 +8,7 @@ import java.util.Map;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
+import com.massoftware.windows.motivoNotaDeCredito.WMotivoNotaDeCredito;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
@@ -395,11 +396,8 @@ public class WMotivosNotasDeCreditos extends Window {
 		try {
 
 			itemsGRD.select(null);
-			Window window = new Window("Agregar ítem");
-			window.setModal(true);
-			window.center();
-			window.setWidth("400px");
-			window.setHeight("300px");
+			WMotivoNotaDeCredito window = new WMotivoNotaDeCredito();
+			
 			getUI().addWindow(window);
 
 		} catch (Exception e) {
@@ -413,13 +411,9 @@ public class WMotivosNotasDeCreditos extends Window {
 			if (itemsGRD.getSelectedRow() != null) {
 
 				MotivosNotasDeCreditos item = (MotivosNotasDeCreditos) itemsGRD.getSelectedRow();
-				item.getMotivo();
 
-				Window window = new Window("Modificar ítem " + item);
-				window.setModal(true);
-				window.center();
-				window.setWidth("400px");
-				window.setHeight("300px");
+				WMotivoNotaDeCredito window = new WMotivoNotaDeCredito(item);
+
 				getUI().addWindow(window);
 			}
 

@@ -8,6 +8,7 @@ import java.util.Map;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
+import com.massoftware.windows.motivoComentario.WMotivoComentario;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
@@ -395,11 +396,8 @@ public class WMotivosComentarios extends Window {
 		try {
 
 			itemsGRD.select(null);
-			Window window = new Window("Agregar ítem");
-			window.setModal(true);
-			window.center();
-			window.setWidth("400px");
-			window.setHeight("300px");
+			WMotivoComentario window = new WMotivoComentario();
+
 			getUI().addWindow(window);
 
 		} catch (Exception e) {
@@ -413,13 +411,9 @@ public class WMotivosComentarios extends Window {
 			if (itemsGRD.getSelectedRow() != null) {
 
 				MotivosComentarios item = (MotivosComentarios) itemsGRD.getSelectedRow();
-				item.getMotivo();
+				
+				WMotivoComentario window = new WMotivoComentario(item);
 
-				Window window = new Window("Modificar ítem " + item);
-				window.setModal(true);
-				window.center();
-				window.setWidth("400px");
-				window.setHeight("300px");
 				getUI().addWindow(window);
 			}
 

@@ -8,6 +8,7 @@ import java.util.Map;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
+import com.massoftware.windows.tipoDocumentoAfip.WTipoDocumentoAfip;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
@@ -395,11 +396,10 @@ public class WTiposDocumentosAfip extends Window {
 		try {
 
 			itemsGRD.select(null);
-			Window window = new Window("Agregar ítem");
-			window.setModal(true);
-			window.center();
-			window.setWidth("400px");
-			window.setHeight("300px");
+
+
+			WTipoDocumentoAfip window = new WTipoDocumentoAfip();
+			
 			getUI().addWindow(window);
 
 		} catch (Exception e) {
@@ -411,15 +411,10 @@ public class WTiposDocumentosAfip extends Window {
 		try {
 
 			if (itemsGRD.getSelectedRow() != null) {
-
+	
 				TiposDocumentosAfip item = (TiposDocumentosAfip) itemsGRD.getSelectedRow();
-				item.getTipo();
+				WTipoDocumentoAfip window = new WTipoDocumentoAfip(item);
 
-				Window window = new Window("Modificar ítem " + item);
-				window.setModal(true);
-				window.center();
-				window.setWidth("400px");
-				window.setHeight("300px");
 				getUI().addWindow(window);
 			}
 
