@@ -16,6 +16,7 @@ import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Alignment;
@@ -27,6 +28,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
@@ -832,9 +834,9 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName,
-			String label, boolean readOnly, boolean required, Class clazz,
-			List options) throws Exception {
+	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName, 
+			String label, boolean readOnly, boolean required,
+			Class clazz, List options) throws Exception {
 
 		ComboBox cb = buildCB();
 
@@ -842,11 +844,16 @@ public class UtilUI {
 
 		cb.setRequiredError("El campo '" + label
 				+ "' es requerido. Es decir no debe estar vacio.");
+		
+
+		
 		cb.setRequired(required);
 		if (cb.isRequired()) {
+			
 			cb.setNullSelectionAllowed(false);
+			
 		}
-		// cb.setTextInputAllowed(textInputAllowed);
+//		 cb.setTextInputAllowed(textInputAllowed);
 
 		// ----------------
 
@@ -860,23 +867,99 @@ public class UtilUI {
 		for (Object option : options) {
 			optionsBIC.addBean(option);
 		}
+		
+//		if(widthEM> 0) {
+//			cb.setWidth(widthEM, Unit.EM);
+//		}
+		
 		cb.setContainerDataSource(optionsBIC);
-
-		cb.setPropertyDataSource(dtoBI.getItemProperty(attName));
-
+		
+//		cb.setPropertyDataSource(dtoBI.getItemProperty(attName));
+		
+//		if(!caption.isEmpty()) {
+//			cb.setItemCaptionPropertyId(caption);
+//		}
+		
+		
 		if (cb.isRequired() && optionsBIC.size() > 0) {
 			cb.setValue(optionsBIC.getIdByIndex(0));
+
 		}
 
 		// ----------------
 
 		cb.setPropertyDataSource(dtoBI.getItemProperty(attName));
-
+		
 		cb.setReadOnly(readOnly);
 
 		return cb;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName, 
+			String label, String attName1, String caption, float widthEM, boolean readOnly, boolean required, boolean textInputAllowed, 
+			Class clazz, List options) throws Exception {
+
+		ComboBox cb = buildCB();
+
+		cb.setCaption(label);
+
+		cb.setRequiredError("El campo '" + label
+				+ "' es requerido. Es decir no debe estar vacio.");
+		
+
+		
+		cb.setRequired(required);
+		if (cb.isRequired()) {
+			
+			cb.setNullSelectionAllowed(false);
+			
+		}
+		 cb.setTextInputAllowed(textInputAllowed);
+
+		// ----------------
+
+		// BeanItemContainer<clazz> paisesBIC = new
+		// BeanItemContainer<clazz>(
+		// clazz, new ArrayList<clazz>());
+
+		BeanItemContainer optionsBIC = new BeanItemContainer(clazz,
+				new ArrayList());
+		// optionsBIC.removeAllItems();
+		for (Object option : options) {
+			optionsBIC.addBean(option);
+		}
+		
+		if(widthEM> 0) {
+			cb.setWidth(widthEM, Unit.EM);
+		}
+		
+		cb.setContainerDataSource(optionsBIC);
+		
+
+		
+		if(!caption.isEmpty()) {
+			cb.setItemCaptionPropertyId(caption);
+		}
+		
+	
+
+		if (cb.isRequired() && optionsBIC.size() > 0) {
+			cb.setValue(optionsBIC.getIdByIndex(0));
+
+		}
+		
+		cb.setPropertyDataSource(dtoBI.getItemProperty(attName1));
+		
+		// ----------------
+
+
+		
+		cb.setReadOnly(readOnly);
+
+		return cb;
+	}
+	
 	public static OptionGroup buildOG() {
 		OptionGroup og = new OptionGroup();
 		og.addStyleName(ValoTheme.OPTIONGROUP_SMALL);
@@ -1105,6 +1188,20 @@ public class UtilUI {
 		return df;
 	}
 
+	public static Label buildLbl(String label, float widthEM) {
+		Label lbl= new Label();
+		
+		lbl.setCaption(label);
+		
+		if(widthEM> 0) {
+			lbl.setWidth(widthEM, Unit.EM);
+		}
+		
+		
+		return lbl;
+		
+	}
+	
 	@SuppressWarnings("rawtypes")
 	private static Field getField(Class clazz, String attNamne)
 			throws SecurityException, ClassNotFoundException,

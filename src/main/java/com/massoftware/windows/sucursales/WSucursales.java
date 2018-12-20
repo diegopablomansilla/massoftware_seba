@@ -8,6 +8,7 @@ import java.util.Map;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
+import com.massoftware.windows.sucursal.WSucursal;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
@@ -396,11 +397,11 @@ public class WSucursales extends Window {
 		try {
 
 			itemsGRD.select(null);
-			Window window = new Window("Agregar ítem");
-			window.setModal(true);
-			window.center();
-			window.setWidth("400px");
-			window.setHeight("300px");
+			WSucursal window = new WSucursal();
+//			window.setModal(true);
+//			window.center();
+//			window.setWidth("400px");
+//			window.setHeight("300px");
 			getUI().addWindow(window);
 
 		} catch (Exception e) {
@@ -414,13 +415,13 @@ public class WSucursales extends Window {
 			if (itemsGRD.getSelectedRow() != null) {
 
 				Sucursales item = (Sucursales) itemsGRD.getSelectedRow();
-				item.getSucursal();
+//				item.getSucursal();
 
-				Window window = new Window("Modificar ítem " + item);
-				window.setModal(true);
-				window.center();
-				window.setWidth("400px");
-				window.setHeight("300px");
+				WSucursal window = new WSucursal(item);
+//				window.setModal(true);
+//				window.center();
+//				window.setWidth("400px");
+//				window.setHeight("300px");
 				getUI().addWindow(window);
 			}
 

@@ -84,7 +84,7 @@ public class WZona extends Window {
 	public void init() {
 		try {
 
-			UtilUI.confWinForm(this, "Zonas");
+			UtilUI.confWinForm(this, "Zona");
 
 
 			VerticalLayout content = UtilUI.buildWinContentVertical();

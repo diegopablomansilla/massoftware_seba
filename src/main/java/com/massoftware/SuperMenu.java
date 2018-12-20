@@ -30,7 +30,6 @@ import com.massoftware.windows.tiposDocumentosAfip.WTiposDocumentosAfip;
 import com.massoftware.windows.tiposRetenciones.WTiposRetenciones;
 import com.massoftware.windows.transportes.WTransportes;
 import com.massoftware.windows.unidadesDeMedida.WUnidadesDeMedida;
-import com.massoftware.windows.zona.WZona;
 import com.massoftware.windows.zonas.WZonas;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
@@ -57,38 +56,44 @@ public class SuperMenu extends AbstractMenu {
 
 		final MenuBar.MenuItem a1 = menubar.addItem("Ventas-Archivo", null);
 
-		a1.addItem("Países", openPaisesCmd());
-		a1.addItem("Provincias", openProvinciasCmd());
-		a1.addItem("Zonas", openZonasCmd());
-		a1.addItem("Sub ctas-ctes", openSubCtaCteCmd());
-		a1.addItem("Condiciones de ventas", openCondDeVentasCmd("Ventas"));
-		a1.addItem("Bloqueo de clientes", openBloqClientesCmd());
 		a1.addItem("Alícuotas", openAlicuotasCmd());
-		a1.addItem("Cargas", openCargasCmd());
-		a1.addItem("Sucursales", openSucursalesCmd());
-		a1.addItem("Tipos documentos AFIP", openTiposDocAfipCmd());
-		a1.addItem("Motivos comentarios", openMotivosComentariosCmd());
-		a1.addItem("Motivos notas de créditos", openMotivosNotasCreditoCmd());
-		a1.addItem("Depositos", openDepositosCmd());
-		a1.addItem("Talonarios", openTalonariosCmd());
-		a1.addItem("Ciudades", openCiudadesCmd());
-		a1.addItem("Tipos de clientes", openTiposDeClientesCmd());
-		a1.addItem("Marcas", openMarcasCmd());
-		a1.addItem("Unidades de medida", openUnidadesDeMedidaCmd());
-		a1.addItem("Códigos convenio multilateral", openCodConvMultilateralCmd());
-		a1.addItem("Rubros proveedores", openRubrosProveedoresCmd());
-		a1.addItem("Sub cuenta corriente", openSubCtaCteProvCmd());
-		a1.addItem("Transportes", openTransporteCmd());
-		a1.addItem("Condiciones de compras", openCondDeVentasCmd("Compras"));
-		a1.addItem("Centros de costo - Proyectos", openCentroCostoProyectoCmd());
-		a1.addItem("Tipos retenciones", openTiposRetencionesCmd());
-		a1.addItem("Clase comprobantes", openClaseComprobantesCmd());
-		a1.addItem("Perfiles de facturación", openPerfilesDeFacturacionCmd());
-		a1.addItem("Convenios de elaboración", openConvenioDeElaboracionCmd());
-		a1.addItem("Conceptos retención", openConceptosRetencionCmd());
+		a1.addItem("Bloqueo de clientes", openBloqClientesCmd());
 		a1.addItem("Bonificación Grupos", openBonifGruposCmd());
 		a1.addItem("Bonificación Productos", openBonifProductoCmd());
+		a1.addItem("Cargas", openCargasCmd());
+		a1.addItem("Centros de costo - Proyectos", openCentroCostoProyectoCmd());
+		a1.addItem("Ciudades", openCiudadesCmd());
+		a1.addItem("Clase comprobantes", openClaseComprobantesCmd());
+		a1.addItem("Códigos convenio multilateral", openCodConvMultilateralCmd());
+		a1.addItem("Conceptos retención", openConceptosRetencionCmd());
+		a1.addItem("Condiciones de compras", openCondDeVentasCmd("Compras"));
+		a1.addItem("Condiciones de ventas", openCondDeVentasCmd("Ventas"));
+		a1.addItem("Convenios de elaboración", openConvenioDeElaboracionCmd());
+		a1.addItem("Depositos", openDepositosCmd());
 		a1.addItem("FechaCierreXModulo", openFechaCierreXModuloCmd());
+		a1.addItem("Marcas", openMarcasCmd());
+		a1.addItem("Motivos comentarios", openMotivosComentariosCmd());
+		a1.addItem("Motivos notas de créditos", openMotivosNotasCreditoCmd());
+		a1.addItem("Países", openPaisesCmd());
+		a1.addItem("Perfiles de facturación", openPerfilesDeFacturacionCmd());
+		a1.addItem("Provincias", openProvinciasCmd());
+		a1.addItem("Rubros proveedores", openRubrosProveedoresCmd());
+		a1.addItem("Sub ctas-ctes", openSubCtaCteCmd());
+		a1.addItem("Sub cuenta corriente", openSubCtaCteProvCmd());
+		a1.addItem("Sucursales", openSucursalesCmd());
+		a1.addItem("Talonarios", openTalonariosCmd());
+		a1.addItem("Tipos de clientes", openTiposDeClientesCmd());
+		a1.addItem("Tipos documentos AFIP", openTiposDocAfipCmd());
+		a1.addItem("Tipos retenciones", openTiposRetencionesCmd());
+		a1.addItem("Transportes", openTransporteCmd());	
+		a1.addItem("Unidades de medida", openUnidadesDeMedidaCmd());
+		a1.addItem("Zonas", openZonasCmd());
+
+
+
+
+
+
 
 		return menubar;
 	}
